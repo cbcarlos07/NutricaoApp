@@ -1,0 +1,37 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="ham.org.br.nutricao.activity.MainActivity"
+    android:weightSum="1">
+
+    <TextView
+        android:id="@+id/tvTipoRefeicao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:text="Tipo de Refeição"
+        android:textSize="18sp"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:id="@+id/lv_tp_refeicao"
+        android:layout_weight="0.03" />
+
+    <TextView
+        android:id="@+id/tvData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:text="Data"
+        android:textSize="18sp"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:id="@+id/lv_Data"/>
+
+</LinearLayout>
