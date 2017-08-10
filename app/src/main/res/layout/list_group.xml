@@ -9,6 +9,10 @@
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:id="@+id/tv_tipo_prato"
-        android:paddingLeft="25dp"/>
+        android:paddingLeft="25dp"
+        android:text="PRINCIPAL"
+        android:textColor="#ffffff"
+        android:background="#2196F3"
+        android:padding="12px"/>
 
 </LinearLayout>

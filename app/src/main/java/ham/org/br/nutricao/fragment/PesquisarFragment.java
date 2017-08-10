@@ -1,6 +1,10 @@
 package ham.org.br.nutricao.fragment;
 
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -8,18 +12,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.Spinner;
+import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import ham.org.br.nutricao.R;
+import ham.org.br.nutricao.activity.CardapioActivity;
 import ham.org.br.nutricao.model.TipoRefeicao;
-import ham.org.br.nutricao.model.TiposRefeicao;
-import ham.org.br.nutricao.service.Service;
+import ham.org.br.nutricao.service.ServiceAPI;
+import ham.org.br.nutricao.service.TipoRefeicaoRetrofit;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,22 +39,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * A simple {@link Fragment} subclass.
  */
 public class PesquisarFragment extends Fragment {
-    private final String BASE_URL = "http://10.50.140.54/webservice/";
-    private List<TipoRefeicao> listTipoRefeicao;
-    private List <String> listData;
-    private int idTipoRefeicao;
-    SimpleDateFormat data_br = new SimpleDateFormat("dd/MM/yyyy");
-    Date dataAtual = new Date();
-    private ArrayAdapter<TipoRefeicao> adapterTipoRefeicao;
+    static SimpleDateFormat data_br = new SimpleDateFormat("dd/MM/yyyy");
+    static Date dataAtual = new Date();
 
+    private Spinner spinnerTipoRefeicao;
+    private TextView textViewData;
+    private ArrayList<TipoRefeicao> listTipoRefeicao;
 
-
-    ListView listViewTipoRef;
-    ListView listViewData;
-    private String[] datas = {
-            data_br.format( dataAtual )
-    };
-
+    private Button pesquisar;
+    private String strData = data_br.format( dataAtual );
     public PesquisarFragment() {
         // Required empty public constructor
     }
@@ -57,69 +59,102 @@ public class PesquisarFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pesquisar, container, false);
 
-        listViewTipoRef = (ListView) view.findViewById( R.id.lv_tp_refeicao );
-        listViewData = (ListView) view.findViewById( R.id.lv_Data );
+        spinnerTipoRefeicao = (Spinner) view.findViewById( R.id.spinnerTipoRefeicao );
+        textViewData = (TextView) view.findViewById( R.id.textViewData );
+        pesquisar    = (Button) view.findViewById( R.id.btn_consultar );
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl( BASE_URL )
-                .addConverterFactory( GsonConverterFactory.create() )
-                .build();
 
-        Service service = retrofit.create(Service.class);
 
-        chamarTipoRefeicao( service );
+        chamarTipoRefeicao();
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(
-                getActivity(),
-                R.layout.item_data,
-                R.id.tv_item_data,
-                datas
-        );
 
-        listViewData.setAdapter( dataAdapter );
-        return view;
-    }
 
-    private void chamarTipoRefeicao( Service service ){
-        listTipoRefeicao =  new ArrayList<TipoRefeicao>();
-        final List<TipoRefeicao> tipoRefeicaoList = new ArrayList<TipoRefeicao>();
-        TiposRefeicao tiposRefeicao = new TiposRefeicao();
-        Call<List<TipoRefeicao>> callList = service.getlistTipoRefeicao("A");
-        callList.enqueue(new Callback<List<TipoRefeicao>>() {
+        textViewData.setText( strData );
+
+        textViewData.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(Call<List<TipoRefeicao>> call, Response<List<TipoRefeicao>> response) {
-                Log.i("onResponse TipoRefeicao",response.toString());
-                if( response.isSuccessful() ){
-                    List<TipoRefeicao> lstTipoRefeicao = response.body();
-                    Log.i("TiposRefeicao",lstTipoRefeicao.toString());
-
-                    for ( TipoRefeicao tipoRefeicao : lstTipoRefeicao ){
-                        listTipoRefeicao.add( tipoRefeicao );
-                        Log.i("TipoFor",tipoRefeicao.getDescricao());
-                    }
-
-                    Iterator iterator = listTipoRefeicao.iterator();
-                    if( iterator.hasNext() ){
-                        TipoRefeicao tipoRefeicao = (TipoRefeicao) iterator.next();
-                        Log.i("Tipo",tipoRefeicao.getDescricao());
-                        tipoRefeicaoList.add( tipoRefeicao );
-                        idTipoRefeicao = tipoRefeicao.getCodigo();
-                    }
-                    adapterTipoRefeicao = new ArrayAdapter<TipoRefeicao>(
-                            getActivity(),
-                            R.layout.item_tipo_refeicao,
-                            R.id.tv_item_tipo_prato,
-                            tipoRefeicaoList);
-                    listViewTipoRef.setAdapter( adapterTipoRefeicao );
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<TipoRefeicao>> call, Throwable t) {
-                Log.i("onFailure TipoRefeicao", t.getMessage());
+            public void onClick(View view) {
+                showDatePickerDialog();
             }
         });
+        listTipoRefeicao = getListTipoRefeicao();
 
+
+
+
+
+
+
+        return view;
+
+
+    }
+
+    private void chamarTipoRefeicao( ){
+
+
+        TipoRefeicaoRetrofit tipoRefeicaoRetrofit = new TipoRefeicaoRetrofit( getActivity(), spinnerTipoRefeicao, pesquisar, textViewData );
+        tipoRefeicaoRetrofit.execute(  );
+
+
+    }
+
+
+
+    public void showDatePickerDialog() {
+
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getActivity().getFragmentManager(), "datePicker");
+
+    }
+
+
+
+
+    public class DatePickerFragment extends DialogFragment implements  DatePickerDialog.OnDateSetListener{
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+
+
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            // Create a new instance of DatePickerDialog and return it
+
+            return new DatePickerDialog(  getActivity(), this, year, month, day);
+        }
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+            // create date object using date set by user
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(year, month, day);
+            Date date = calendar.getTime();
+
+        /*if (getTargetFragment() == null)
+            return;*/
+
+            SimpleDateFormat data_br = new SimpleDateFormat( "dd/MM/yyyy" );
+            String data = data_br.format( date );
+
+            strData = data;
+            textViewData.setText( strData );
+//            dataAdapter.notifyDataSetChanged();
+
+        }
+
+
+
+    }
+
+    public ArrayList<TipoRefeicao> getListTipoRefeicao(){
+        return this.listTipoRefeicao;
+    }
+
+    public void setListTipoRefeicao( ArrayList<TipoRefeicao> lista ){
+        this.listTipoRefeicao = lista;
     }
 
 }

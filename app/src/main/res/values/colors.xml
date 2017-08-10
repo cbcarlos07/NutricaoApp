@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorToolbar">#E8EAF6</color>
+    <color name="colorCorpo">#e8eaf6</color>
+    <color name="colorIcone">#9fa8da</color>
 </resources>

@@ -6,6 +6,9 @@
     android:id="@+id/tv_item_tipo_prato"
     android:text="Almoço"
     android:textColor="#000000"
-    android:textSize="35px">
+    android:textSize="35px"
+    android:padding="12px"
+    android:background="#ffffff">
+
 
 </TextView>

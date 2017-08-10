@@ -15,12 +15,23 @@ public class TipoPrato {
 
         private String tipoprato;
 
+        @SerializedName("cd_cardapio")
+        private int cardapio;
+
+
         @SerializedName("pratos")
 
         private ArrayList<Prato> pratoList = new ArrayList<>();
 
+    public int getCardapio() {
+        return cardapio;
+    }
 
-        public String getTipoprato() {
+    public void setCardapio(int cardapio) {
+        this.cardapio = cardapio;
+    }
+
+    public String getTipoprato() {
             return tipoprato;
         }
 

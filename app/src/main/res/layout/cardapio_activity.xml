@@ -1,14 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorCorpo"
+    android:orientation="vertical"
     tools:context="ham.org.br.nutricao.activity.CardapioActivity">
 
-    <ExpandableListView
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/lvExp" />
+    <include
+        android:id="@+id/toolbarCardapio"
+        layout="@layout/toolbar" />
 
-</android.support.constraint.ConstraintLayout>
+    <ExpandableListView
+        android:id="@+id/lvExp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+
+
+        android:background="@color/colorCorpo" />
+
+    <Button
+        android:id="@+id/btn_acao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Button" />
+
+
+</LinearLayout>

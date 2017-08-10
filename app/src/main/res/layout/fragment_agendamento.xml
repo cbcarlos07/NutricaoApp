@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ham.org.br.nutricao.activity.AgendamentoFragment">
+    tools:context="ham.org.br.nutricao.fragment.AgendamentoFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

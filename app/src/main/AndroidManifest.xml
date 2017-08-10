@@ -20,7 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.CardapioActivity"></activity>
+        <activity android:name=".activity.CardapioActivity" />
+        <activity android:name=".activity.RefeicaoActivity"></activity>
     </application>
 
 </manifest>

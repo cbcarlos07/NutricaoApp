@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -80,6 +81,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter{
         TextView lblTipoPrato = (TextView) view.findViewById( R.id.tv_tipo_prato );
         lblTipoPrato.setTypeface(null, Typeface.BOLD);
         lblTipoPrato.setText( tituloGrupo );
+
+       /* ExpandableListView expandableListView = (ExpandableListView) viewGroup;
+        expandableListView.expandGroup( grupoPosicao );*/
 
         return view;
     }

@@ -9,7 +9,8 @@
     android:weightSum="1">
 
     <include android:id="@+id/toolbar"
-        layout="@layout/toolbar" />
+        layout="@layout/toolbar"
+        />
 
     <ham.org.br.nutricao.util.SlidingTabLayout
         android:id="@+id/slt_tabs"
