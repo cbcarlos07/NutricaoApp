@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -53,6 +54,8 @@ public class TipoRefeicaoRetrofit extends AsyncTask<String, String, ArrayList<Ti
     protected void onPreExecute() {
         dialog = new ProgressDialog( context );
         dialog.setMessage( "Aguarde um momento" );
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
     }
 
@@ -60,12 +63,8 @@ public class TipoRefeicaoRetrofit extends AsyncTask<String, String, ArrayList<Ti
     protected ArrayList<TipoRefeicao> doInBackground(String... strings) {
         dialog.setMessage( "Aguarde um momento" );
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl( ServiceAPI.BASE_URL )
-                .addConverterFactory( GsonConverterFactory.create() )
-                .build();
 
-        ServiceAPI serviceAPI = retrofit.create(ServiceAPI.class);
+        ServiceAPI serviceAPI = ServiceAPI.retrofit.create(ServiceAPI.class);
 
         listTipoRefeicao =  new ArrayList<TipoRefeicao>();
 
@@ -99,7 +98,10 @@ public class TipoRefeicaoRetrofit extends AsyncTask<String, String, ArrayList<Ti
 
             @Override
             public void onFailure(Call<List<TipoRefeicao>> call, Throwable t) {
-                Log.i("onFailure TipoRefeicao", t.getMessage());
+               // Log.i("onFailure TipoRefeicao", t.getMessage());
+                dialog.dismiss();
+                //Log.i("onFailure age", t.getMessage());
+                Toast.makeText( context, "Ocorreu um problema ao buscar os dados\n"+t.getMessage(), Toast.LENGTH_LONG ).show();
             }
         });
 

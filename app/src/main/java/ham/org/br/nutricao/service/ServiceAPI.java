@@ -8,6 +8,8 @@ import ham.org.br.nutricao.model.RetornoMensagem;
 import ham.org.br.nutricao.model.TipoPrato;
 import ham.org.br.nutricao.model.TipoRefeicao;
 import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -46,7 +48,10 @@ public interface ServiceAPI {
                                          @Query("cardapio") String cardapio,
                                          @Query("operacao") String operacao);
 
-
+    Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl( ServiceAPI.BASE_URL )
+            .addConverterFactory( GsonConverterFactory.create() )
+            .build();
 
 
 

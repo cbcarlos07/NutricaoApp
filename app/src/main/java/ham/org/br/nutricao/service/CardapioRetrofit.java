@@ -1,11 +1,14 @@
 package ham.org.br.nutricao.service;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.Adapter;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +45,8 @@ public class CardapioRetrofit extends AsyncTask<String, String, ExpandableListVi
     protected void onPreExecute() {
         dialog = new ProgressDialog( context );
         dialog.setMessage( "Recebendo Cardápio" );
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
     }
 
@@ -68,15 +73,15 @@ public class CardapioRetrofit extends AsyncTask<String, String, ExpandableListVi
             @Override
             public void onResponse(Call<List<TipoPrato>> call, Response<List<TipoPrato>> response) {
                 //     Log.i("onResponse TipoPratos",response.toString());
-
+                int cardapio = 0;
                 if( response.isSuccessful() ){
                     List<TipoPrato> tipoPratos = response.body();
                     int i = 0;
+
                     for( TipoPrato tipoPrato : tipoPratos ){
 
-                        Log.i("Tipo", tipoPrato.getTipoprato());
-                        CardapioActivity cardapioActivity = new CardapioActivity();
-                        cardapioActivity.setCdCardapio( tipoPrato.getCardapio() );
+                        Log.i("Tipo", ""+tipoPrato.getCardapio());
+                        cardapio  = tipoPrato.getCardapio();
                         ArrayList<Prato> listaPratos = tipoPrato.getPratoList();
 
                         listGrupo.add(tipoPrato.getTipoprato());
@@ -89,6 +94,8 @@ public class CardapioRetrofit extends AsyncTask<String, String, ExpandableListVi
                             ingredientes.add( prato.getIngrediente() );
                             listIngredientes.put( prato.getPrato(), prato.getIngrediente() );
                         }
+
+
 
                         listaItem.put( listGrupo.get( i ), pratos );
 
@@ -118,7 +125,10 @@ public class CardapioRetrofit extends AsyncTask<String, String, ExpandableListVi
 
             @Override
             public void onFailure(Call<List<TipoPrato>> call, Throwable t) {
-                Log.i("onFailure TipoPrato", t.getMessage());
+                //Log.i("onFailure TipoPrato", t.getMessage());
+                dialog.dismiss();
+                //Log.i("onFailure age", t.getMessage());
+                Toast.makeText( context, "Ocorreu um problema ao buscar os dados\nTente novamente mais tarde\n"+t.getMessage(), Toast.LENGTH_LONG ).show();
             }
         });
 
@@ -130,5 +140,33 @@ public class CardapioRetrofit extends AsyncTask<String, String, ExpandableListVi
     protected void onProgressUpdate(String... values) {
 //        super.onProgressUpdate(values);
         dialog.setMessage( "Recebendo Cardápio" );
+        //ListView on child click listener
+
     }
+
+    @Override
+    protected void onPostExecute(ExpandableListView expandableListView) {
+        //super.onPostExecute(expandableListView);
+        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView expandableListView, View view, int group, int item, long l) {
+                String valor = listIngredientes.get(  listaItem.get( listGrupo.get( group ) ).get( item )  );
+                // Log.i("Objeto", valor);
+                abrirMensagem( "Ingredientes",valor );
+                return false;
+            }
+        });
+    }
+
+    private void abrirMensagem(String titulo, String mensagem ){
+
+        AlertDialog.Builder alert = new AlertDialog.Builder( context );
+        alert.setTitle(titulo);
+        alert.setMessage( mensagem );
+        alert.setNeutralButton("OK", null);
+        AlertDialog dialog = alert.create();
+        dialog.show();
+
+    }
+
 }

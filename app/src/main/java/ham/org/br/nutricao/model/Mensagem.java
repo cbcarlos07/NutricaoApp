@@ -32,7 +32,20 @@ public class Mensagem {
 
     @SerializedName("acao")
 
+
     private String acao;
+
+    @SerializedName("cardapio")
+
+    private int cardapio;
+
+    public int getCardapio() {
+        return cardapio;
+    }
+
+    public void setCardapio(int cardapio) {
+        this.cardapio = cardapio;
+    }
 
     public String getAcao() {
         return acao;

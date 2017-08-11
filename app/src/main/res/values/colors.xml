@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="colorToolbar">#E8EAF6</color>
-    <color name="colorCorpo">#e8eaf6</color>
+    <color name="colorPrimary">#1565C0</color> <!-- barra de titulo -->
+    <color name="colorPrimaryDark">#0D47A1</color> <!-- barra superior -->
+    <color name="colorAccent">#2196F3</color>
+    <color name="colorToolbar">#1976D2</color>
+    <color name="colorTabView">#1E88E5</color>
+    <color name="colorCorpo">#BBDEFB</color>
     <color name="colorIcone">#9fa8da</color>
+    <color name="colorTextoList">#0D47A1</color>
+    <color name="colorPrimaryDarker">#0D47A1</color>
+    <color name="colorNormalCancelar">#F44336</color>
+    <color name="colorNormalAgendar">#009688</color>
+    <color name="colorControlHighlightCancelar">#E57373</color>
 </resources>

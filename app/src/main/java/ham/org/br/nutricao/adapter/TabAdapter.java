@@ -37,7 +37,7 @@ public class TabAdapter extends FragmentStatePagerAdapter{
         super(fm);
         this.context = c;
         double escala = this.context.getResources().getDisplayMetrics().density; //tamanho do dispositivo
-        tamanhoIcone = (int) (36 * escala);
+        tamanhoIcone = (int) (25 * escala);
         this.fragmentosUtilizados = new HashMap<>();
     }
 

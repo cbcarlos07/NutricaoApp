@@ -1,14 +1,23 @@
 package ham.org.br.nutricao.service;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import ham.org.br.nutricao.R;
 import ham.org.br.nutricao.activity.CardapioActivity;
+import ham.org.br.nutricao.activity.MainActivity;
 import ham.org.br.nutricao.model.RetornoMensagem;
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -26,11 +35,16 @@ public class SalvarOperacao extends AsyncTask<String, String, String>  {
     private Button button;
     private String mensagem;
     private char retorno;
+    private String cracha;
+    private int cardapio;
+    private String acao;
+    private Activity activity;
 
-    public SalvarOperacao( Context c, Button btn ){
+    public SalvarOperacao(Context c, Button btn, Activity act){
 
         this.context = c;
         this.button = btn;
+        this.activity = act;
     }
 
     @Override
@@ -45,13 +59,21 @@ public class SalvarOperacao extends AsyncTask<String, String, String>  {
     @Override
     protected String doInBackground(final String ... params) {
         publishProgress("Enviando dados... aguarde");
-        final Retrofit retrofit = new Retrofit.Builder()
+
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl( ServiceAPI.BASE_URL )
                 .addConverterFactory( GsonConverterFactory.create() )
                 .build();
 
         ServiceAPI serviceAPI = retrofit.create(ServiceAPI.class);
 
+        cracha = params[0];
+        cardapio = Integer.parseInt( params[1] ) ;
+        acao = params[2];
+
+        Log.i("Salvar cracha", params[0]);
+        Log.i("Salvar Cardapio", params[1]);
+        Log.i("Salvar acao", params[2]);
         final Call<RetornoMensagem> mensagemCall = serviceAPI.insertOperacao( "I", params[0],
                                         params[1],
                                         params[2] );
@@ -91,15 +113,17 @@ public class SalvarOperacao extends AsyncTask<String, String, String>  {
 
                 }
                 dialog.dismiss();
-                CardapioActivity cardapioActivity = new CardapioActivity();
-                switch ( params[0].charAt(0) ){
+
+                switch ( params[2].charAt(0) ){
                     case 'A':
-                        cardapioActivity.setAcao('C');
-                        button.setText( "Cancelar Refeição" );
+                        retorno = 'C';
+                        button.setText( context.getString(R.string.btn_cancelar ) );
+                        button.setBackgroundColor(   context.getResources().getColor( R.color.colorNormalCancelar )  );
                         break;
                     case 'C':
-                        cardapioActivity.setAcao( 'A' );
-                        button.setText( "Agendar " );
+                        retorno = 'A' ;
+                        button.setText( context.getString(R.string.btn_agendar ) );
+                        button.setBackgroundColor(   context.getResources().getColor( R.color.colorNormalAgendar )  );
                 }
                 Toast.makeText(context, mensagem, Toast.LENGTH_SHORT).show();
 
@@ -108,7 +132,19 @@ public class SalvarOperacao extends AsyncTask<String, String, String>  {
 
             @Override
             public void onFailure(Call<RetornoMensagem> call, Throwable t) {
+                //Log.i("onFailure TipoPrato", t.getMessage());
+                dialog.dismiss();
+                //Log.i("onFailure age", t.getMessage());
+                //Toast.makeText( context, , Toast.LENGTH_LONG ).show();
+                AlertDialog.Builder alerta = new AlertDialog.Builder( context );
+                alerta.setTitle( "Ops" );
+                alerta.setMessage( "Ocorreu um problema ao salvar operação\nTente novamente mais tarde\n"+t.getMessage() );
+                //t.printStackTrace();
+                alerta.setNeutralButton( "OK", null );
+                AlertDialog dialog = alerta.create();
+                Log.i("Retorno", t.toString());
 
+                dialog.show();
             }
         });
         return mensagem;
@@ -117,11 +153,17 @@ public class SalvarOperacao extends AsyncTask<String, String, String>  {
     @Override
     protected void onProgressUpdate(String... values) {
         //super.onProgressUpdate(values);
-        dialog.setMessage(values[0]);
+        dialog.setMessage("Enviando dados... aguarde");
     }
 
     @Override
     protected void onPostExecute(String s) {
+
+       activity.finish();
+       context.startActivity( activity.getIntent() );
+        CardapioActivity.acao = acao.charAt(0);
+
+
 
     }
 }

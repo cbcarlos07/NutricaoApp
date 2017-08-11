@@ -8,4 +8,16 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="botaoPadrao" parent="Theme.AppCompat.Light">
+        <item name="colorButtonNormal">@color/colorPrimaryDarker</item>
+        <item name="colorControlHighlight">@color/colorPrimary</item> <!-- mudar de cor ao clicar -->
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="botaoCancelar" parent="Theme.AppCompat.Light">
+        <item name="colorButtonNormal">@color/colorNormalCancelar</item>
+        <item name="colorControlHighlight">@color/colorControlHighlightCancelar</item> <!-- mudar de cor ao clicar -->
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
 </resources>

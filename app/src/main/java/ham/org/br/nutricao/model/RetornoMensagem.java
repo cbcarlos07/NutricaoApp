@@ -9,16 +9,16 @@ public class RetornoMensagem {
 
     @SerializedName("success")
 
-    private Integer success;
+    private int success;
     @SerializedName("email")
 
     private String email;
 
-    public Integer getSuccess() {
+    public int getSuccess() {
         return success;
     }
 
-    public void setSuccess(Integer success) {
+    public void setSuccess(int success) {
         this.success = success;
     }
 

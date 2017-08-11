@@ -2,6 +2,7 @@ package ham.org.br.nutricao.activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +23,7 @@ import java.util.List;
 import ham.org.br.nutricao.R;
 
 import ham.org.br.nutricao.model.Mensagem;
+import ham.org.br.nutricao.model.RetornoMensagem;
 import ham.org.br.nutricao.model.TipoPrato;
 import ham.org.br.nutricao.model.Prato;
 import ham.org.br.nutricao.model.TipoRefeicao;
@@ -52,7 +55,7 @@ public class CardapioActivity extends AppCompatActivity {
     private Toolbar toolbar;
 
     private Button btn_acao;
-    private char acao;
+    public static char acao;
     private int cdCardapio;
     private ServiceAPI serviceAPI;
     private String teste;
@@ -94,14 +97,12 @@ public class CardapioActivity extends AppCompatActivity {
         setTitle( strTipo+" - "+data );
 
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl( ServiceAPI.BASE_URL )
-                .addConverterFactory( GsonConverterFactory.create() )
-                .build();
-        ServiceAPI serviceAPI = retrofit.create(ServiceAPI.class);
 
-        chamarTipoPratos(idTipoRef, data );
+        ServiceAPI serviceAPI = ServiceAPI.retrofit.create(ServiceAPI.class);
+
+
         getMensagem(serviceAPI, idTipoRef, data, "4142" );
+        chamarTipoPratos(idTipoRef, data );
 
 
 
@@ -109,16 +110,7 @@ public class CardapioActivity extends AppCompatActivity {
 
     //    chamarPratos( serviceAPI );
 
-        //ListView on child click listener
-        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView expandableListView, View view, int group, int item, long l) {
-                String valor = listIngredientes.get(  listaItem.get( listGrupo.get( group ) ).get( item )  );
-               // Log.i("Objeto", valor);
-                abrirMensagem( "Ingredientes",valor );
-                return false;
-            }
-        });
+
 
 
         btn_acao.setOnClickListener(new View.OnClickListener() {
@@ -141,6 +133,9 @@ public class CardapioActivity extends AppCompatActivity {
 
                     Mensagem mensagem = response.body();
                    // mensagem = new Mensagem();
+                    setCdCardapio( mensagem.getCardapio() );
+
+
 
                     if( !mensagem.getMotivo().equals("") ){
 
@@ -153,21 +148,27 @@ public class CardapioActivity extends AppCompatActivity {
                     Log.i("Mensagem Acao", mensagem.getAcao());
                     switch ( mensagem.getAcao() ) {
                         case "A":
-                            btn_acao.setText( "Agendar" );
+                            btn_acao.setText( getString( R.string.btn_agendar ) );
                             btn_acao.setVisibility( View.VISIBLE );
+
+                            btn_acao.setBackgroundColor(   getResources().getColor( R.color.colorNormalAgendar )  );
+                            acao = 'A' ;
                             setAcao( 'A' );
                             break;
                         case "C":
-                            btn_acao.setText( "Cancelar Refeição" );
+                            btn_acao.setText( getString( R.string.btn_cancelar ) );
                             btn_acao.setVisibility( View.VISIBLE );
+                            btn_acao.setBackgroundColor(   getResources().getColor( R.color.colorNormalCancelar )  );
+                            acao =  'C' ;
                             setAcao( 'C' );
                             break;
                         case "N":
                             btn_acao.setVisibility( View.INVISIBLE );
+                            acao =  'N' ;
                             setAcao( 'N' );
                             break;
                         default:
-                            btn_acao.setText( "Agendar" );
+                            btn_acao.setText( getString( R.string.btn_agendar ) );
                             btn_acao.setVisibility( View.VISIBLE );
                             break;
                     }
@@ -260,10 +261,107 @@ public class CardapioActivity extends AppCompatActivity {
     }
 
 
-    private void inserirOperacao(String cracha ){
-        SalvarOperacao salvarOperacao = new SalvarOperacao(CardapioActivity.this, btn_acao);
-        salvarOperacao.execute( cracha, String.valueOf( getCdCardapio() ), String.valueOf(getAcao()) );
+    public void inserirOperacao(String cracha ){
+        //SalvarOperacao salvarOperacao = new SalvarOperacao(CardapioActivity.this, btn_acao, CardapioActivity.this);
+
+       // salvarOperacao.execute( cracha, String.valueOf( getCdCardapio() ), String.valueOf(acao) );
+
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl( ServiceAPI.BASE_URL )
+                .addConverterFactory( GsonConverterFactory.create() )
+                .build();
+
+        ServiceAPI serviceAPI = retrofit.create(ServiceAPI.class);
+
+        final ProgressDialog dialog = new ProgressDialog( CardapioActivity.this );
+        dialog.setMessage( "Enviando dados... aguarde" );
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
+        Log.i("Salvar Cracha", cracha);
+        Log.i("Salvar Cardapio", String.valueOf(getCdCardapio()));
+        Log.i("Salvar Acai", String.valueOf(getAcao() ));
+        final Call<RetornoMensagem> mensagemCall = serviceAPI.insertOperacao( "I", cracha,
+                                                                               String.valueOf( getCdCardapio() ) ,
+                                                                                String.valueOf(getAcao()) );
+        mensagemCall.enqueue(new Callback<RetornoMensagem>() {
+            @Override
+            public void onResponse(Call<RetornoMensagem> call, Response<RetornoMensagem> response) {
+                String mensagem = "";
+                if( response.isSuccessful() ){
+
+                    RetornoMensagem retornoMensagemService = response.body();
+                    RetornoMensagem retornoMensagem = new RetornoMensagem();
+                    retornoMensagem.setEmail( retornoMensagemService.getEmail() );
+                    retornoMensagem.setSuccess( retornoMensagemService.getSuccess() );
+
+                    switch (retornoMensagem.getSuccess()){
+                        case 0:
+                            //mensagemOperacao(  );
+                            mensagem = "Ocorreu um erro na operação!\n Tente novamente mais tarde";
+
+
+
+                            break;
+                        case 1:
+                            mensagem = "Operação efetuada com sucesso \nEnviamos um e-mail para "+retornoMensagem.getEmail();
+
+
+                            break;
+                        case 2:
+                            mensagem = "Você já efetuação previamente" ;
+
+                            // mensagemOperacao( "Você já efetuação previamente" );
+
+                            break;
+                    }
+                    Log.i("Async", mensagem);
+                  //  publishProgress("Requisição consluída");
+
+
+                }
+                dialog.dismiss();
+
+                switch ( getAcao() ){
+                    case 'A':
+
+                        setAcao( 'C' );
+                        btn_acao.setText( getString(R.string.btn_cancelar ) );
+                        btn_acao.setBackgroundColor(   getResources().getColor( R.color.colorNormalCancelar )  );
+                        break;
+                    case 'C':
+
+                        setAcao( 'A' );
+                        btn_acao.setText( getString(R.string.btn_agendar ) );
+                        btn_acao.setBackgroundColor(   getResources().getColor( R.color.colorNormalAgendar )  );
+                }
+                Toast.makeText(CardapioActivity.this, mensagem, Toast.LENGTH_SHORT).show();
+
+
+            }
+
+            @Override
+            public void onFailure(Call<RetornoMensagem> call, Throwable t) {
+                //Log.i("onFailure TipoPrato", t.getMessage());
+                dialog.dismiss();
+                //Log.i("onFailure age", t.getMessage());
+                //Toast.makeText( context, , Toast.LENGTH_LONG ).show();
+                AlertDialog.Builder alerta = new AlertDialog.Builder( CardapioActivity.this );
+                alerta.setTitle( "Ops" );
+                alerta.setMessage( "Ocorreu um problema ao salvar operação\nTente novamente mais tarde\n"+t.getMessage() );
+                //t.printStackTrace();
+                alerta.setNeutralButton( "OK", null );
+                AlertDialog dialog = alerta.create();
+                Log.i("Retorno", t.toString());
+
+                dialog.show();
+            }
+        });
+
     }
+
+
 
 
     public String getCracha(){

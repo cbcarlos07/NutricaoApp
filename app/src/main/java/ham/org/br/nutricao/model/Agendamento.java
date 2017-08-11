@@ -8,19 +8,30 @@ public class Agendamento {
 
     @SerializedName("cardapio")
 
-    private String cardapio;
+    private int cardapio;
     @SerializedName("data")
 
     private String data;
     @SerializedName("tipo")
 
     private String tipo;
+    @SerializedName("cdtipo")
 
-    public String getCardapio() {
+    private int cdTipo;
+
+    public int getCdTipo() {
+        return cdTipo;
+    }
+
+    public void setCdTipo(int cdTipo) {
+        this.cdTipo = cdTipo;
+    }
+
+    public int getCardapio() {
         return cardapio;
     }
 
-    public void setCardapio(String cardapio) {
+    public void setCardapio(int cardapio) {
         this.cardapio = cardapio;
     }
 
