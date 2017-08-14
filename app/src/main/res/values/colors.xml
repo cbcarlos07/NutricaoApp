@@ -5,6 +5,7 @@
     <color name="colorAccent">#2196F3</color>
     <color name="colorToolbar">#1976D2</color>
     <color name="colorTabView">#1E88E5</color>
+    <color name="colorTabIndicator">#0D47A1</color>
     <color name="colorCorpo">#BBDEFB</color>
     <color name="colorIcone">#9fa8da</color>
     <color name="colorTextoList">#0D47A1</color>

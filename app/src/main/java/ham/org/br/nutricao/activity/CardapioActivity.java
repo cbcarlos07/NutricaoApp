@@ -101,7 +101,7 @@ public class CardapioActivity extends AppCompatActivity {
         ServiceAPI serviceAPI = ServiceAPI.retrofit.create(ServiceAPI.class);
 
 
-        getMensagem(serviceAPI, idTipoRef, data, "4142" );
+        getMensagem(serviceAPI, idTipoRef, data, SenhaActivity.crachaBundle );
         chamarTipoPratos(idTipoRef, data );
 
 
@@ -116,7 +116,7 @@ public class CardapioActivity extends AppCompatActivity {
         btn_acao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                inserirOperacao( "4142" );
+                inserirOperacao( SenhaActivity.crachaBundle );
             }
         });
 

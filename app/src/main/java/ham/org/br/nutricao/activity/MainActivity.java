@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         slidingTabLayout.setCustomTabView( R.layout.tab_view, R.id.text_item_tab );
         slidingTabLayout.setDistributeEvenly( true );
-        slidingTabLayout.setSelectedIndicatorColors(ContextCompat.getColor( this, R.color.colorIcone ));
+        slidingTabLayout.setSelectedIndicatorColors(ContextCompat.getColor( this, R.color.colorTabIndicator ));
         slidingTabLayout.setViewPager( viewPager );
 
 

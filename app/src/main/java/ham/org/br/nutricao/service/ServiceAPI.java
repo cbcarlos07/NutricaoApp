@@ -3,6 +3,7 @@ package ham.org.br.nutricao.service;
 import java.util.List;
 
 import ham.org.br.nutricao.model.Agendamento;
+import ham.org.br.nutricao.model.CrachaValida;
 import ham.org.br.nutricao.model.Mensagem;
 import ham.org.br.nutricao.model.RetornoMensagem;
 import ham.org.br.nutricao.model.TipoPrato;
@@ -11,6 +12,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -53,6 +55,15 @@ public interface ServiceAPI {
             .addConverterFactory( GsonConverterFactory.create() )
             .build();
 
+
+    @GET("nutricao/")
+    Call<CrachaValida> getRetornoCracha(@Query("acao") String acao, @Query("cracha") String cracha);
+
+    @GET("nutricao/")
+    Call<RetornoMensagem> getInserirUser(@Query("acao") String acao, @Query("cracha") String cracha);
+
+    @GET("nutricao/")
+    Call<RetornoMensagem> logarSistema(@Header("Authorization") String autHeader);
 
 
 }
