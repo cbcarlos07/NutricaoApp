@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent( MainActivity.this, CrachaActivity.class );
         startActivity( intent );
+        CardapioActivity.cardapioActivity.finish();
         finish();
 
     }
