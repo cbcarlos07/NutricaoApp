@@ -130,7 +130,7 @@ public class CardapioActivity extends AppCompatActivity {
         mensagemCall.enqueue(new Callback<Mensagem>() {
             @Override
             public void onResponse(Call<Mensagem> call, Response<Mensagem> response) {
-                Log.i("Mensagens body",response.toString());
+              //  Log.i("Mensagens body",response.toString());
                 if( response.isSuccessful() ){
 
                     Mensagem mensagem = response.body();
@@ -202,7 +202,7 @@ public class CardapioActivity extends AppCompatActivity {
         mensagemCall.enqueue(new Callback<Mensagem>() {
             @Override
             public void onResponse(Call<Mensagem> call, Response<Mensagem> response) {
-                Log.i("Mensagens body",response.toString());
+          //      Log.i("Mensagens body",response.toString());
                 if( response.isSuccessful() ){
 
                     Mensagem mensagem = response.body();

@@ -66,7 +66,7 @@ public class CrachaActivity extends AppCompatActivity {
                         CrachaValida crachaValidaResponse = response.body();
                         if( crachaValidaResponse.getSuccess() == 1 ){
 
-                            Log.i("Cracha Email", crachaValidaResponse.getEmail());
+                         //   Log.i("Cracha Email", crachaValidaResponse.getEmail());
                             teste = true;
 
                             //mensagemToast( crachaValidaResponse.getNome()+"Possui cadastro" );
