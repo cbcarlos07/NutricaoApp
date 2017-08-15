@@ -1,6 +1,20 @@
 apply plugin: 'com.android.application'
 
 android {
+
+    lintOptions {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+
+    signingConfigs {
+        nutricao {
+            keyAlias 'NAME_APP'
+            keyPassword 'PWD_APP'
+            storePassword 'PWD_STR'
+            storeFile file('C:/Users/carlos.bruno/AndroidStudioProjects/NutricaoAPPKey/nutricao.jks')
+        }
+    }
     compileSdkVersion 26
     buildToolsVersion "25.0.2"
     defaultConfig {
@@ -15,16 +29,21 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.nutricao
+        }
+    }
+    productFlavors {
+        nutricaoFlavor {
+            signingConfig signingConfigs.nutricao
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'

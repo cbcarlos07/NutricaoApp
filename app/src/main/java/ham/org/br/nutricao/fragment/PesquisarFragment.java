@@ -103,7 +103,7 @@ public class PesquisarFragment extends Fragment {
 
     public void showDatePickerDialog() {
 
-        DialogFragment newFragment = new DatePickerFragment();
+        DialogFragment newFragment = new DatePickerFragment( textViewData );
         newFragment.show(getActivity().getFragmentManager(), "datePicker");
 
     }
@@ -111,43 +111,7 @@ public class PesquisarFragment extends Fragment {
 
 
 
-    public class DatePickerFragment extends DialogFragment implements  DatePickerDialog.OnDateSetListener{
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
 
-
-            final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
-
-            // Create a new instance of DatePickerDialog and return it
-
-            return new DatePickerDialog(  getActivity(), this, year, month, day);
-        }
-        @Override
-        public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-            // create date object using date set by user
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(year, month, day);
-            Date date = calendar.getTime();
-
-        /*if (getTargetFragment() == null)
-            return;*/
-
-            SimpleDateFormat data_br = new SimpleDateFormat( "dd/MM/yyyy" );
-            String data = data_br.format( date );
-
-            strData = data;
-            textViewData.setText( strData );
-//            dataAdapter.notifyDataSetChanged();
-
-        }
-
-
-
-    }
 
     public ArrayList<TipoRefeicao> getListTipoRefeicao(){
         return this.listTipoRefeicao;
