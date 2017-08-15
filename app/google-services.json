@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "504872973675",
+    "firebase_url": "https://nutricao-5e0b6.firebaseio.com",
+    "project_id": "nutricao-5e0b6",
+    "storage_bucket": "nutricao-5e0b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:504872973675:android:582f06d051fe4823",
+        "android_client_info": {
+          "package_name": "ham.org.br.nutricao"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "504872973675-d63p302kdbp6a6pbnvkim0ch8s0tkj06.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ham.org.br.nutricao",
+            "certificate_hash": "41f40e30f09271d866ad0e2156b7b65688029c3d"
+          }
+        },
+        {
+          "client_id": "504872973675-344tsg9j6uq1c8qo8qn5jai2kr165p9s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCR3sLX__7-s73JK8OUtlnhES6T3hoo9No"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "504872973675-344tsg9j6uq1c8qo8qn5jai2kr165p9s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

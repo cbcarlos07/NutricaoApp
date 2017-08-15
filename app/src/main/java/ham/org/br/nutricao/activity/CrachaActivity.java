@@ -155,6 +155,7 @@ public class CrachaActivity extends AppCompatActivity {
             SenhaActivity.crachaBundle = preferences.getCracha();
             Intent intent = new Intent( CrachaActivity.this, MainActivity.class );
             startActivity( intent );
+            finish();
         }
 
 
