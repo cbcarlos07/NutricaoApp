@@ -1,6 +1,7 @@
 package ham.org.br.nutricao.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -44,33 +45,30 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CardapioActivity extends AppCompatActivity {
 
-    private final String BASE_URL = "http://10.50.140.54/webservice/";
+
     private String[] permissoesNecessarias = new String[]{
             Manifest.permission.INTERNET
 
     };
-    private ExpandableListAdapter listAdapter;
+
     private ExpandableListView expListView;
-    private List<TipoRefeicao> listTipoRefeicao;
-    private List<String> listGrupo;
-    private List<String> listIngrediente;
-    private HashMap<String, String> listIngredientes;
-    private HashMap<String, List<String>> listaItem;
     private Toolbar toolbar;
 
     private Button btn_acao;
     public static char acao;
     private int cdCardapio;
-    private ServiceAPI serviceAPI;
-    private String teste;
-    private String responseOk;
-    private String cracha;
+
+
+    private  ServiceAPI serviceAPI;
+    private int idTipoRef;
+    private String data;
+    public static Activity cardapioActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cardapio_activity);
-
+        cardapioActivity = this;
         Permissao.validaPermissoes(1, this, permissoesNecessarias );
 
         if (android.os.Build.VERSION.SDK_INT > 9) {
@@ -94,18 +92,18 @@ public class CardapioActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
 
-        int idTipoRef = bundle.getInt( "tipo" );
-        String data   = bundle.getString( "data" );
+        idTipoRef = bundle.getInt( "tipo" );
+        data   = bundle.getString( "data" );
         String strTipo   = bundle.getString( "strTipo" );
         //toolbar.setTitle( "Cardápio - "+data+" - "+strTipo );
         setTitle( strTipo+" - "+data );
 
 
 
-        ServiceAPI serviceAPI = ServiceAPI.retrofit.create(ServiceAPI.class);
+         serviceAPI = ServiceAPI.retrofit.create(ServiceAPI.class);
 
 
-        getMensagem(serviceAPI, idTipoRef, data, SenhaActivity.crachaBundle );
+        getMensagem( );
         chamarTipoPratos(idTipoRef, data );
 
 
@@ -127,8 +125,8 @@ public class CardapioActivity extends AppCompatActivity {
 
     }
 
-    private void getMensagem (ServiceAPI serviceAPI, int idTipoRef, String data, String cracha ){
-        Call<Mensagem> mensagemCall = serviceAPI.getMensagem( "M", idTipoRef, data, cracha );
+    private void getMensagem (  ){
+        Call<Mensagem> mensagemCall = serviceAPI.getMensagem( "M", idTipoRef, data, SenhaActivity.crachaBundle );
         mensagemCall.enqueue(new Callback<Mensagem>() {
             @Override
             public void onResponse(Call<Mensagem> call, Response<Mensagem> response) {
@@ -149,7 +147,79 @@ public class CardapioActivity extends AppCompatActivity {
                         btn_acao.setText( "Agendar" );
                     }
 
-                    Log.i("Mensagem Acao", mensagem.getAcao());
+               //     Log.i("Mensagem Acao", mensagem.getAcao());
+                    switch ( mensagem.getAcao() ) {
+                        case "A":
+                            btn_acao.setText( getString( R.string.btn_agendar ) );
+                            btn_acao.setVisibility( View.VISIBLE );
+
+                            btn_acao.setBackgroundColor(   getResources().getColor( R.color.colorNormalAgendar )  );
+                            acao = 'A' ;
+                            setAcao( 'A' );
+                            break;
+                        case "C":
+                            btn_acao.setText( getString( R.string.btn_cancelar ) );
+                            btn_acao.setVisibility( View.VISIBLE );
+                            btn_acao.setBackgroundColor(   getResources().getColor( R.color.colorNormalCancelar )  );
+                            acao =  'C' ;
+                            setAcao( 'C' );
+                            break;
+                        case "N":
+                            btn_acao.setVisibility( View.INVISIBLE );
+                            acao =  'N' ;
+                            setAcao( 'N' );
+                            break;
+                        default:
+                            btn_acao.setText( getString( R.string.btn_agendar ) );
+                            btn_acao.setVisibility( View.VISIBLE );
+                            break;
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Mensagem> call, Throwable t) {
+                //Log.i("onFailure Mensagem", t.getMessage());
+                AlertDialog.Builder builder = new AlertDialog.Builder( CardapioActivity.this );
+                builder.setTitle("Ops");
+                builder.setMessage("Ocorreu um erro:\n"+t.getMessage());
+
+                builder.setPositiveButton("OK", null);
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+            }
+        });
+
+
+    }
+
+    private void getMensagemBotao (  ){
+        Call<Mensagem> mensagemCall = serviceAPI.getMensagem( "M", idTipoRef, data, SenhaActivity.crachaBundle );
+        mensagemCall.enqueue(new Callback<Mensagem>() {
+            @Override
+            public void onResponse(Call<Mensagem> call, Response<Mensagem> response) {
+                Log.i("Mensagens body",response.toString());
+                if( response.isSuccessful() ){
+
+                    Mensagem mensagem = response.body();
+                    // mensagem = new Mensagem();
+                    setCdCardapio( mensagem.getCardapio() );
+
+
+
+                    if( !mensagem.getMotivo().equals("") ){
+
+                       // abrirMensagem( "Atenção!", mensagem.getMotivo() );
+
+                    }else{
+                        btn_acao.setText( "Agendar" );
+                    }
+
+                   // Log.i("Mensagem Acao", mensagem.getAcao());
                     switch ( mensagem.getAcao() ) {
                         case "A":
                             btn_acao.setText( getString( R.string.btn_agendar ) );
@@ -351,6 +421,8 @@ public class CardapioActivity extends AppCompatActivity {
                 }
                 Toast.makeText(CardapioActivity.this, mensagem, Toast.LENGTH_SHORT).show();
 
+                getMensagemBotao();
+
 
             }
 
@@ -370,13 +442,6 @@ public class CardapioActivity extends AppCompatActivity {
 
 
 
-    public String getCracha(){
-        return this.cracha;
-    }
-
-    public void setCracha(String codigo){
-        this.cracha = codigo;
-    }
 
     private void refresh(  ){
         Intent intent = getIntent();

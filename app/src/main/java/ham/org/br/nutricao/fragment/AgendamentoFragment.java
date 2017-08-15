@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import ham.org.br.nutricao.R;
+import ham.org.br.nutricao.activity.SenhaActivity;
 import ham.org.br.nutricao.service.AgendamentoRetrofit;
 
 /**
@@ -16,7 +17,7 @@ import ham.org.br.nutricao.service.AgendamentoRetrofit;
  */
 public class AgendamentoFragment extends Fragment {
 
-    ListView listViewAgendamento;
+    private ListView listViewAgendamento;
 
     public AgendamentoFragment() {
         // Required empty public constructor
@@ -32,7 +33,7 @@ public class AgendamentoFragment extends Fragment {
         listViewAgendamento = (ListView) view.findViewById( R.id.lv_agendamento );
 
         AgendamentoRetrofit agendamentoRetrofit = new AgendamentoRetrofit( getActivity(), listViewAgendamento );
-        agendamentoRetrofit.execute("4142");
+        agendamentoRetrofit.execute( SenhaActivity.crachaBundle );
 
         return view;
     }

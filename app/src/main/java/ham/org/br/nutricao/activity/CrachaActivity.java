@@ -150,6 +150,9 @@ public class CrachaActivity extends AppCompatActivity {
 
         Preferences preferences = new Preferences( CrachaActivity.this );
         if( preferences.getNome() != null ){
+            SenhaActivity.nomeBundle = preferences.getNome();
+            SenhaActivity.emailBundle = preferences.getEmail();
+            SenhaActivity.crachaBundle = preferences.getCracha();
             Intent intent = new Intent( CrachaActivity.this, MainActivity.class );
             startActivity( intent );
         }

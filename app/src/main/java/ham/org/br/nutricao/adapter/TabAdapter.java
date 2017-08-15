@@ -19,8 +19,8 @@ import android.view.ViewGroup;
 
 import java.util.HashMap;
 
+import ham.org.br.nutricao.fragment.AgendamentosFragment;
 import ham.org.br.nutricao.R;
-import ham.org.br.nutricao.fragment.AgendamentoFragment;
 import ham.org.br.nutricao.fragment.PesquisarFragment;
 
 /**
@@ -52,7 +52,7 @@ public class TabAdapter extends FragmentStatePagerAdapter{
                 fragmentosUtilizados.put( position, fragment );
                 break;
             case 1:
-                fragment = new AgendamentoFragment();
+                fragment = new AgendamentosFragment();
 
                 break;
         }
