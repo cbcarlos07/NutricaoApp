@@ -1,5 +1,6 @@
 package ham.org.br.nutricao.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.content.ContextCompat;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private SlidingTabLayout slidingTabLayout;
     private ViewPager viewPager;
     private Toolbar toolbar;
+    public static Activity mainActivity;
 
 @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById( R.id.toolbar );
         toolbar.setTitle( "Nutrição" );
         setSupportActionBar( toolbar );
-
+        mainActivity = this;
 
         slidingTabLayout = ( SlidingTabLayout ) findViewById( R.id.slt_tabs );
         viewPager        = ( ViewPager ) findViewById( R.id.vp_pagina );
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent( MainActivity.this, CrachaActivity.class );
         startActivity( intent );
+        finish();
 
     }
 }

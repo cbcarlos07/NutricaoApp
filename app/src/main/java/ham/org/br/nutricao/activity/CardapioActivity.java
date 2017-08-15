@@ -435,7 +435,9 @@ public class CardapioActivity extends AppCompatActivity {
 
         Intent intent = new Intent( CardapioActivity.this, CrachaActivity.class );
         startActivity( intent );
+        MainActivity.mainActivity.finish();
         finish();
+
 
     }
 
