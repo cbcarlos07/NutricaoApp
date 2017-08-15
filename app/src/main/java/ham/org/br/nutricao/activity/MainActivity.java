@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private Toolbar toolbar;
     public static Activity mainActivity;
+    public static boolean mainAtivo = false;
 
 @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +87,23 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent( MainActivity.this, CrachaActivity.class );
         startActivity( intent );
-        CardapioActivity.cardapioActivity.finish();
+        if( CardapioActivity.cardapioAtivo ){
+            CardapioActivity.cardapioActivity.finish();
+        }
+
         finish();
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mainAtivo = true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mainAtivo = false;
     }
 }

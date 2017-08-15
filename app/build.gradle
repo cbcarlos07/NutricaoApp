@@ -7,14 +7,14 @@ android {
         checkReleaseBuilds false
     }
 
-    signingConfigs {
+  /*  signingConfigs {
         config {
             keyAlias 'NAME_APP'
             keyPassword 'PWD_APP'
             storeFile file('C:/Users/carlos.bruno/AndroidStudioProjects/NutricaoAPPKey/nutricao.jks')
             storePassword 'PWD_STR'
         }
-    }
+    }*/
     compileSdkVersion 26
     buildToolsVersion "25.0.2"
     defaultConfig {
@@ -30,12 +30,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             //signingConfig signingConfigs.nutricao
-            signingConfig signingConfigs.config
+           // signingConfig signingConfigs.config
         }
     }
     productFlavors {
         free {
-            signingConfig signingConfigs.config
+//            signingConfig signingConfigs.config
         }
     }
 }

@@ -63,6 +63,7 @@ public class CardapioActivity extends AppCompatActivity {
     private int idTipoRef;
     private String data;
     public static Activity cardapioActivity;
+    public static boolean cardapioAtivo =  false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +124,18 @@ public class CardapioActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        cardapioAtivo = true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        cardapioAtivo = false;
     }
 
     private void getMensagem (  ){
@@ -500,7 +513,10 @@ public class CardapioActivity extends AppCompatActivity {
 
         Intent intent = new Intent( CardapioActivity.this, CrachaActivity.class );
         startActivity( intent );
-        MainActivity.mainActivity.finish();
+        if( MainActivity.mainAtivo ){
+            MainActivity.mainActivity.finish();
+        }
+
         finish();
 
 
