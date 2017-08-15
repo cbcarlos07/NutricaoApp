@@ -21,7 +21,7 @@ import retrofit2.http.Query;
  */
 
 public interface ServiceAPI {
-    public  final static String BASE_URL = "http://10.50.140.54/webservice/";
+    public  final static String BASE_URL = "http://boleto.ham.org.br:8080/webservice/";
 
     @GET("nutricao/")
     Call<List<TipoPrato>> getlistTipoPratos(

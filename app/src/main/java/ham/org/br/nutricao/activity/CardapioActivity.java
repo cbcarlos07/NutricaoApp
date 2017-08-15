@@ -11,6 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
@@ -22,6 +25,7 @@ import java.util.List;
 
 import ham.org.br.nutricao.R;
 
+import ham.org.br.nutricao.helper.Preferences;
 import ham.org.br.nutricao.model.Mensagem;
 import ham.org.br.nutricao.model.RetornoMensagem;
 import ham.org.br.nutricao.model.TipoPrato;
@@ -179,7 +183,16 @@ public class CardapioActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Mensagem> call, Throwable t) {
-                Log.i("onFailure Mensagem", t.getMessage());
+                //Log.i("onFailure Mensagem", t.getMessage());
+                AlertDialog.Builder builder = new AlertDialog.Builder( CardapioActivity.this );
+                builder.setTitle("Ops");
+                builder.setMessage("Ocorreu um erro:\n"+t.getMessage());
+
+                builder.setPositiveButton("OK", null);
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
             }
         });
 
@@ -279,9 +292,9 @@ public class CardapioActivity extends AppCompatActivity {
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
         dialog.show();
-        Log.i("Salvar Cracha", cracha);
-        Log.i("Salvar Cardapio", String.valueOf(getCdCardapio()));
-        Log.i("Salvar Acai", String.valueOf(getAcao() ));
+     //   Log.i("Salvar Cracha", cracha);
+     //   Log.i("Salvar Cardapio", String.valueOf(getCdCardapio()));
+     //   Log.i("Salvar Acai", String.valueOf(getAcao() ));
         final Call<RetornoMensagem> mensagemCall = serviceAPI.insertOperacao( "I", cracha,
                                                                                String.valueOf( getCdCardapio() ) ,
                                                                                 String.valueOf(getAcao()) );
@@ -316,7 +329,7 @@ public class CardapioActivity extends AppCompatActivity {
 
                             break;
                     }
-                    Log.i("Async", mensagem);
+                   // Log.i("Async", mensagem);
                   //  publishProgress("Requisição consluída");
 
 
@@ -347,15 +360,8 @@ public class CardapioActivity extends AppCompatActivity {
                 dialog.dismiss();
                 //Log.i("onFailure age", t.getMessage());
                 //Toast.makeText( context, , Toast.LENGTH_LONG ).show();
-                AlertDialog.Builder alerta = new AlertDialog.Builder( CardapioActivity.this );
-                alerta.setTitle( "Ops" );
-                alerta.setMessage( "Ocorreu um problema ao salvar operação\nTente novamente mais tarde\n"+t.getMessage() );
-                //t.printStackTrace();
-                alerta.setNeutralButton( "OK", null );
-                AlertDialog dialog = alerta.create();
-                Log.i("Retorno", t.toString());
+                dialogMensagem( "Ops", "Ocorreu um problema ao salvar operação\nTente novamente mais tarde\n"+t.getMessage() );
 
-                dialog.show();
             }
         });
 
@@ -376,6 +382,61 @@ public class CardapioActivity extends AppCompatActivity {
         Intent intent = getIntent();
         finish();
         startActivity( intent );
+    }
+
+    private void dialogMensagem(String titulo, String mensagem){
+        AlertDialog.Builder alerta = new AlertDialog.Builder( CardapioActivity.this );
+        alerta.setTitle( titulo );
+        alerta.setMessage( mensagem );
+        //t.printStackTrace();
+        alerta.setNeutralButton( "OK", null );
+        AlertDialog dialog = alerta.create();
+        //     Log.i("Retorno", t.toString());
+
+        dialog.show();
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate( R.menu.menu_cardapio, menu );
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch ( item.getItemId() ){
+
+            case R.id.action_perfil_card:
+                abrirPerfil();
+                break;
+
+            case R.id.action_sair_card:
+                sair();
+                break;
+
+        }
+        return super.onOptionsItemSelected( item );
+    }
+
+    private void abrirPerfil(){
+
+        Intent intent = new Intent( CardapioActivity.this, PerfilActivity.class );
+        startActivity( intent );
+
+    }
+
+    private void sair(){
+        Preferences preferences = new Preferences( CardapioActivity.this );
+        preferences.salvarDados( null, null, null );
+
+        Intent intent = new Intent( CardapioActivity.this, CrachaActivity.class );
+        startActivity( intent );
+        finish();
+
     }
 
 

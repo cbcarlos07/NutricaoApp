@@ -115,8 +115,8 @@ public class CriarSenhaActivity extends AppCompatActivity {
 
                 String base64Crypt = Base64.encodeToString( dados.getBytes(), Base64.NO_WRAP );
 
-                Log.i("Campo: ", base64Crypt);
-                Log.i("Campo Email", usuario.getEmail());
+               // Log.i("Campo: ", base64Crypt);
+               // Log.i("Campo Email", usuario.getEmail());
                 Call<RetornoMensagem> retornoMensagemCall = serviceAPI.getInserirUser( "D", base64Crypt );
                 final ProgressDialog progressDialog = new ProgressDialog( CriarSenhaActivity.this );
                 progressDialog.setMessage( "Salvando dados..." );

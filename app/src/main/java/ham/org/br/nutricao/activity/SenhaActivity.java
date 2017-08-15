@@ -99,6 +99,8 @@ public class SenhaActivity extends AppCompatActivity {
                                 Preferences preferences = new Preferences( SenhaActivity.this );
                                 preferences.salvarDados( nomeBundle, crachaBundle, emailBundle );
 
+
+
                                 Intent intent = new Intent( getApplicationContext(), MainActivity.class );
 
                                 startActivity( intent );
