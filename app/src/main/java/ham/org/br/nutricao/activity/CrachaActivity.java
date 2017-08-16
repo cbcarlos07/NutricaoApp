@@ -1,32 +1,40 @@
 package ham.org.br.nutricao.activity;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import ham.org.br.nutricao.R;
 import ham.org.br.nutricao.helper.Preferences;
 import ham.org.br.nutricao.model.CrachaValida;
+import ham.org.br.nutricao.model.RetornoMensagem;
 import ham.org.br.nutricao.service.ServiceAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CrachaActivity extends AppCompatActivity {
+public class CrachaActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText et_cracha;
     private TextInputLayout input_layout_cracha;
     private Button btn_cracha;
-    boolean teste;
-
+    private String nome;
+    private String email;
+    private boolean teste;
+    private ProgressBar progressBar;
+    private TextView tv_cracha_termo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,14 +45,13 @@ public class CrachaActivity extends AppCompatActivity {
         input_layout_cracha = (TextInputLayout) findViewById( R.id.input_layout_cracha );
         btn_cracha          = (Button) findViewById( R.id.btn_cracha );
         et_cracha           = (EditText) findViewById( R.id.et_cracha );
+        progressBar         = ( ProgressBar ) findViewById( R.id.progressBar );
+        tv_cracha_termo     = ( TextView ) findViewById( R.id.tv_cracha_termo );
+        progressBar.setVisibility( View.GONE );
 
 
-        btn_cracha.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                validateCracha();
-            }
-        });
+        btn_cracha.setOnClickListener( this );
+        tv_cracha_termo.setOnClickListener( this );
     }
 
     private boolean validateCracha(  ){
@@ -71,26 +78,31 @@ public class CrachaActivity extends AppCompatActivity {
 
                             //mensagemToast( crachaValidaResponse.getNome()+"Possui cadastro" );
                             Intent intent;
+                            nome = crachaValidaResponse.getNome();
+                            email = crachaValidaResponse.getEmail();
                             switch ( crachaValidaResponse.getAtivo() ) {
                                 case -1:
 
                                     intent = new Intent( getApplicationContext(), CriarSenhaActivity.class );
                                     intent.putExtra( "cracha", et_cracha.getText().toString() );
-                                    intent.putExtra( "nome", crachaValidaResponse.getNome() );
-                                    intent.putExtra( "email", crachaValidaResponse.getEmail() );
+
+                                    intent.putExtra( "nome", nome );
+                                    intent.putExtra( "email", email );
+                                    intent.putExtra( "acao", 'C' );
                                     startActivity( intent );
                                     finish();
                                     break;
                                 case 1:
                                     intent = new Intent( getApplicationContext(), SenhaActivity.class );
                                     intent.putExtra( "cracha", et_cracha.getText().toString() );
+
                                     intent.putExtra( "nome", crachaValidaResponse.getNome() );
                                     intent.putExtra( "email", crachaValidaResponse.getEmail() );
                                     startActivity( intent );
                                     finish();
                                     break;
                                 case 0:
-                                    dialogAlert( "você ainda não ativou sua senha\nVerifique seu e-mail" );
+                                    dialogAlert( getApplicationContext().getString( R.string.reenviarEmail ) );
                                     break;
 
                             }
@@ -139,10 +151,54 @@ public class CrachaActivity extends AppCompatActivity {
         AlertDialog.Builder dialog = new AlertDialog.Builder( CrachaActivity.this );
         dialog.setTitle( "E-mail" );
         dialog.setMessage( mensagem );
-        dialog.setNeutralButton( "OK", null );
+        dialog.setPositiveButton(getString(R.string.lbl_sim), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                reenviarEmail();
+            }
+        });
+        dialog.setNegativeButton( getString( R.string.lbl_nao ), null );
         AlertDialog aviso = dialog.create();
         aviso.show();
 
+
+    }
+
+
+    private void reenviarEmail(){
+        ServiceAPI serviceAPI = ServiceAPI.retrofit.create( ServiceAPI.class );
+
+        String envio = email + " | "+nome+" | "+et_cracha.getText().toString();
+
+        String base64 = Base64.encodeToString( envio.getBytes(), Base64.NO_WRAP );
+      //  Log.i("Envio", base64);
+
+        progressBar.setVisibility( View.VISIBLE );
+        btn_cracha.setVisibility( View.INVISIBLE );
+        et_cracha.setVisibility( View.INVISIBLE );
+
+        final Call<RetornoMensagem> retornoMensagemCall = serviceAPI.reenviarEmail( "E", base64 );
+        retornoMensagemCall.enqueue(new Callback<RetornoMensagem>() {
+            @Override
+            public void onResponse(Call<RetornoMensagem> call, Response<RetornoMensagem> response) {
+
+                int retornoMensagemResponse = response.body().getSuccess();
+                if( retornoMensagemResponse == 1 ){
+                    dialogAlert( "Parabéns!", "O e-mail de confirmação foi enviado para o seu e-mail" );
+                    progressBar.setVisibility( View.GONE );
+                    btn_cracha.setVisibility( View.VISIBLE );
+                    et_cracha.setVisibility( View.VISIBLE );
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<RetornoMensagem> call, Throwable t) {
+
+                dialogAlert( "Ops", "Ocorreu um erro ao processar requisição\n"+t.getMessage() );
+
+            }
+        });
 
     }
 
@@ -159,5 +215,34 @@ public class CrachaActivity extends AppCompatActivity {
         }
 
 
+    }
+
+
+    private void dialogAlert( String titulo, String mensagem  ){
+        AlertDialog.Builder alert = new AlertDialog.Builder( CrachaActivity.this  );
+        alert.setTitle( titulo );
+        alert.setMessage( mensagem );
+        alert.setNeutralButton( getString( R.string.lbl_ok ), null );
+
+        AlertDialog aviso = alert.create();
+        aviso.show();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch ( view.getId() ){
+            case R.id.btn_cracha:
+                validateCracha();
+                break;
+            case R.id.tv_cracha_termo:
+                abrirTermo();
+                break;
+
+        }
+    }
+
+    private void abrirTermo( ){
+        Intent intent = new Intent( CrachaActivity.this, TermoActivity.class );
+        startActivity( intent );
     }
 }

@@ -1,11 +1,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="ham.org.br.nutricao.activity.MainActivity">
+    tools:context="ham.org.br.nutricao.activity.MainActivity"
+    >
     <item
         android:id="@+id/action_perfil"
         android:orderInCategory="100"
         android:title="Perfil"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_alterar_senha"
+        android:orderInCategory="100"
+        android:title="@string/lbl_alterar_senha"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_sair"

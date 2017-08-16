@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import ham.org.br.nutricao.R;
@@ -33,30 +34,49 @@ public class CriarSenhaActivity extends AppCompatActivity {
     private EditText senha;
     private EditText reSenha;
     private TextView tv_cracha;
+    private TextView tv_msg_senha;
+    private TextView tv_cria_senha_load;
     private String nomeBundle;
     private String emailBundle;
+    private char acao;
+    private ProgressBar progressBar;
+    private String cracha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_criar_senha);
 
-        inputLayoutSenha = (TextInputLayout) findViewById( R.id.input_layout_senha );
-        inputLayoutRepetirSenha = (TextInputLayout) findViewById( R.id.input_layout_repita_senha );
-        btn_criar_senha  = (Button) findViewById( R.id.btn_criar_senha );
-        senha = ( EditText ) findViewById( R.id.et_senha );
-        reSenha = ( EditText ) findViewById( R.id.et_repita_senha );
-        tv_cracha = (TextView) findViewById( R.id.tv_cracha );
+        inputLayoutSenha        = ( TextInputLayout ) findViewById( R.id.input_layout_senha );
+        inputLayoutRepetirSenha = ( TextInputLayout ) findViewById( R.id.input_layout_repita_senha );
+        btn_criar_senha         = ( Button ) findViewById( R.id.btn_criar_senha );
+        senha                   = ( EditText ) findViewById( R.id.et_senha );
+        reSenha                 = ( EditText ) findViewById( R.id.et_repita_senha );
+        tv_cracha               = ( TextView ) findViewById( R.id.tv_cracha );
+        tv_cria_senha_load      = ( TextView ) findViewById( R.id.tv_cria_senha_load );
+        tv_msg_senha            = ( TextView ) findViewById( R.id.tv_msg_senha );
+        progressBar             = ( ProgressBar ) findViewById( R.id.progressBarCriaSenha );
+        progressBar.setVisibility( View.INVISIBLE );
+
+        tv_cria_senha_load.setVisibility( View.INVISIBLE );
     //    reSenha.addTextChangedListener( new MyTextWatcher( reSenha )  );
       //  senha.addTextChangedListener( new MyTextWatcher( senha )  );
 
         Bundle bundle = getIntent().getExtras();
 
-        String cracha = bundle.getString( "cracha" );
-        nomeBundle = bundle.getString( "nome" );
-        emailBundle = bundle.getString( "email" );
+        cracha = bundle.getString( "cracha" );
+        nomeBundle    = bundle.getString( "nome" );
+        emailBundle   = bundle.getString( "email" );
+        acao          = bundle.getString( "acao" ).charAt(0);
+        tv_cracha.setText( nomeBundle );
+        if( acao == 'C' ){
+            tv_msg_senha.setText( getString( R.string.criarNovaSenha ) );
+        }else{
 
-        tv_cracha.setText( cracha );
+            tv_msg_senha.setText( getString( R.string.alterarSenha ) );
+        }
+
+        tv_cracha.setText( nomeBundle );
 
         btn_criar_senha.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,46 +122,27 @@ public class CriarSenhaActivity extends AppCompatActivity {
 
             if( senha.getText().toString().equals( reSenha.getText().toString() ) ){
 
-                Usuario usuario = new Usuario();
+                    progressBar.setVisibility( View.VISIBLE );
+                    tv_cria_senha_load.setVisibility( View.VISIBLE );
+                    tv_cracha.setVisibility( View.INVISIBLE );
+                    senha.setVisibility( View.INVISIBLE );
+                    reSenha.setVisibility( View.INVISIBLE );
+                    btn_criar_senha.setVisibility( View.INVISIBLE );
 
-                usuario.setCodigo( Integer.parseInt( tv_cracha.getText().toString() ) );
-                usuario.setEmail( emailBundle );
-                usuario.setNome( nomeBundle );
-                usuario.setSenha( senha.getText().toString() );
+                    if( acao == 'C' ){
+                        criarSenha();
+                    }else {
 
-                ServiceAPI serviceAPI = ServiceAPI.retrofit.create( ServiceAPI.class );
-
-                String dados = usuario.getCodigo() + " | "+usuario.getSenha()+" | "+usuario.getEmail()+" | "+usuario.getNome();
-
-                String base64Crypt = Base64.encodeToString( dados.getBytes(), Base64.NO_WRAP );
-
-               // Log.i("Campo: ", base64Crypt);
-               // Log.i("Campo Email", usuario.getEmail());
-                Call<RetornoMensagem> retornoMensagemCall = serviceAPI.getInserirUser( "D", base64Crypt );
-                final ProgressDialog progressDialog = new ProgressDialog( CriarSenhaActivity.this );
-                progressDialog.setMessage( "Salvando dados..." );
-                progressDialog.setCancelable( false );
-                progressDialog.setCanceledOnTouchOutside( false );
-                progressDialog.show();
-                retornoMensagemCall.enqueue(new Callback<RetornoMensagem>() {
-                    @Override
-                    public void onResponse(Call<RetornoMensagem> call, Response<RetornoMensagem> response) {
-                        RetornoMensagem retornoMensagem = response.body();
-                        if( retornoMensagem.getSuccess() == 1 ){
-                            progressDialog.dismiss();
-                            dialogRetorno( "Parabéns", "Sua senha foi criada com sucesso!\nEnviamos um e-mail de confirmação." );
-
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<RetornoMensagem> call, Throwable t) {
-
-                        dialogRetorno( "Erro", "Erro ao tentar salvar\n"+t.getMessage() );
+                        alterarSenha();
 
                     }
-                });
 
+                progressBar.setVisibility( View.INVISIBLE );
+                tv_cria_senha_load.setVisibility( View.INVISIBLE );
+                tv_cracha.setVisibility( View.VISIBLE );
+                senha.setVisibility( View.VISIBLE );
+                reSenha.setVisibility( View.VISIBLE );
+                btn_criar_senha.setVisibility( View.VISIBLE );
 
 
 
@@ -156,6 +157,103 @@ public class CriarSenhaActivity extends AppCompatActivity {
         }
 
     }
+
+    private void criarSenha(){
+        Usuario usuario = new Usuario();
+        inputLayoutSenha.setVisibility( View.INVISIBLE );
+        inputLayoutRepetirSenha.setVisibility( View.INVISIBLE );
+
+        usuario.setCodigo( Integer.parseInt( tv_cracha.getText().toString() ) );
+        usuario.setEmail( emailBundle );
+        usuario.setNome( nomeBundle );
+        usuario.setSenha( senha.getText().toString() );
+
+        ServiceAPI serviceAPI = ServiceAPI.retrofit.create( ServiceAPI.class );
+
+        String dados = usuario.getCodigo() + " | "+usuario.getSenha()+" | "+usuario.getEmail()+" | "+usuario.getNome();
+
+        String base64Crypt = Base64.encodeToString( dados.getBytes(), Base64.NO_WRAP );
+
+        // Log.i("Campo: ", base64Crypt);
+        // Log.i("Campo Email", usuario.getEmail());
+        progressBar.setVisibility( View.VISIBLE );
+        Call<RetornoMensagem> retornoMensagemCall = serviceAPI.getInserirUser( "D", base64Crypt );
+        final ProgressDialog progressDialog = new ProgressDialog( CriarSenhaActivity.this );
+        progressDialog.setMessage( "Salvando dados..." );
+        progressDialog.setCancelable( false );
+        progressDialog.setCanceledOnTouchOutside( false );
+        progressDialog.show();
+        retornoMensagemCall.enqueue(new Callback<RetornoMensagem>() {
+            @Override
+            public void onResponse(Call<RetornoMensagem> call, Response<RetornoMensagem> response) {
+                RetornoMensagem retornoMensagem = response.body();
+                if( retornoMensagem.getSuccess() == 1 ){
+                    progressDialog.dismiss();
+                    progressBar.setVisibility( View.GONE );
+                    inputLayoutSenha.setVisibility( View.VISIBLE );
+                    inputLayoutRepetirSenha.setVisibility( View.VISIBLE );
+                    dialogRetorno( "Parabéns", "Sua senha foi criada com sucesso!\nEnviamos um e-mail de confirmação." );
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RetornoMensagem> call, Throwable t) {
+                progressDialog.dismiss();
+                dialogRetorno( "Erro", "Erro ao tentar salvar\n"+t.getMessage() );
+
+            }
+        });
+    }
+
+    private void alterarSenha(){
+        progressBar.setVisibility( View.VISIBLE );
+        Usuario usuario = new Usuario();
+        inputLayoutSenha.setVisibility( View.INVISIBLE );
+        inputLayoutRepetirSenha.setVisibility( View.INVISIBLE );
+
+        usuario.setCodigo( Integer.parseInt( cracha ) );
+        usuario.setEmail( emailBundle );
+        usuario.setNome( nomeBundle );
+        usuario.setSenha( senha.getText().toString() );
+
+        ServiceAPI serviceAPI = ServiceAPI.retrofit.create( ServiceAPI.class );
+
+        String dados = usuario.getCodigo() + " | "+usuario.getSenha()+" | "+usuario.getEmail()+" | "+usuario.getNome();
+
+        String base64Crypt = Base64.encodeToString( dados.getBytes(), Base64.NO_WRAP );
+
+         Log.i("Campo: ", base64Crypt);
+        // Log.i("Campo Email", usuario.getEmail());
+        Call<RetornoMensagem> retornoMensagemCall = serviceAPI.getInserirUser( "S", base64Crypt );
+        final ProgressDialog progressDialog = new ProgressDialog( CriarSenhaActivity.this );
+        progressDialog.setMessage( "Salvando dados..." );
+        progressDialog.setCancelable( false );
+        progressDialog.setCanceledOnTouchOutside( false );
+        progressDialog.show();
+        retornoMensagemCall.enqueue(new Callback<RetornoMensagem>() {
+            @Override
+            public void onResponse(Call<RetornoMensagem> call, Response<RetornoMensagem> response) {
+                RetornoMensagem retornoMensagem = response.body();
+                if( retornoMensagem.getSuccess() == 1 ){
+                    progressDialog.dismiss();
+                    progressBar.setVisibility( View.GONE );
+                    inputLayoutSenha.setVisibility( View.VISIBLE );
+                    inputLayoutRepetirSenha.setVisibility( View.VISIBLE );
+                    dialogRetorno( "Parabéns", "Sua senha foi criada com sucesso!\nEnviamos um e-mail de confirmação." );
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RetornoMensagem> call, Throwable t) {
+                progressDialog.dismiss();
+                dialogRetorno( "Erro", "Erro ao tentar salvar\n"+t.getMessage() );
+
+            }
+        });
+    }
+
 
     private class MyTextWatcher implements TextWatcher {
 

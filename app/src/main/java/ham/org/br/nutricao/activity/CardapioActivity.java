@@ -83,6 +83,7 @@ public class CardapioActivity extends AppCompatActivity {
 
         btn_acao    = ( Button ) findViewById( R.id.btn_acao );
         toolbar = (Toolbar) findViewById( R.id.toolbarCardapio );
+        toolbar.setNavigationIcon( R.drawable.ic_action_arrow_left );
 
         setSupportActionBar( toolbar );
 
@@ -491,9 +492,11 @@ public class CardapioActivity extends AppCompatActivity {
             case R.id.action_perfil_card:
                 abrirPerfil();
                 break;
-
             case R.id.action_sair_card:
                 sair();
+                break;
+            case R.id.action_alterar_senha_card:
+                alterarSenha();
                 break;
 
         }
@@ -519,6 +522,18 @@ public class CardapioActivity extends AppCompatActivity {
 
         finish();
 
+
+    }
+
+    private void alterarSenha(){
+
+        Intent intent = new Intent( this, CriarSenhaActivity.class );
+        intent.putExtra( "acao", 'A' );
+        intent.putExtra( "nome", SenhaActivity.nomeBundle );
+        intent.putExtra( "email", SenhaActivity.emailBundle );
+        intent.putExtra( "cracha", SenhaActivity.crachaBundle );
+
+        startActivity( intent );
 
     }
 

@@ -12,14 +12,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        />
+        >
+
+        <TextView
+            android:id="@+id/tv_msg_senha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="@string/criarNovaSenha"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/tamanho_label" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:padding="25dp">
+        android:padding="25dp"
+        android:id="@+id/layout_conteudo_cria_senha">
+
+
 
         <TextView
             android:id="@+id/tv_cracha"
@@ -27,7 +41,7 @@
             android:layout_height="wrap_content"
             android:text="4142"
             android:textAlignment="center"
-            android:textSize="18dp"
+            android:textSize="@dimen/tamanho_nome"
             android:textColor="@color/colorPrimary"/>
 
         <android.support.design.widget.TextInputLayout
@@ -66,6 +80,21 @@
             android:layout_height="wrap_content"
             android:text="@string/btn_confirmar"
             android:theme="@style/botaoPadrao"/>
+
+        <ProgressBar
+            android:id="@+id/progressBarCriaSenha"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Carregando"
+            android:textColor="@color/colorPrimary"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:id="@+id/tv_cria_senha_load"/>
 
     </LinearLayout>
 

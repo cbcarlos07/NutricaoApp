@@ -12,7 +12,7 @@
         android:paddingLeft="25dp"
         android:text="PRINCIPAL"
         android:textColor="#ffffff"
-        android:background="#2196F3"
-        android:padding="12px"/>
+        android:background="@color/colortitleGroup"
+        android:padding="@dimen/tamanho_tile_group"/>
 
 </LinearLayout>

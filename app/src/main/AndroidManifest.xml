@@ -20,7 +20,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.CardapioActivity" />
+        <activity android:name=".activity.CardapioActivity"
+                  android:label="@string/lbl_tela_cardapio"  >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity"/>
+        </activity>
         <activity android:name=".activity.RefeicaoActivity" />
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.CriarSenhaActivity" />
@@ -29,6 +34,13 @@
             android:name=".activity.PerfilActivity"
             android:label="@string/title_activity_perfil"
             android:theme="@style/AppTheme" />
+        <activity android:name=".activity.EsqueceuActivity" />
+        <activity android:name=".activity.TermoActivity"
+                  android:label="@string/lbl_tela_termo" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.CrachaActivity"/>
+        </activity>
     </application>
 
 </manifest>

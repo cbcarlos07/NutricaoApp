@@ -13,6 +13,8 @@
     <string name="senhaNot">Senha incorreta</string>
     <string name="reSenha">Repita a Senha</string>
     <string name="senhaNaoIguais">Senhas não são iguais</string>
+    <string name="lbl_esqueceu_senha"> <strong> Esqueceu a senha? Toque aqui</strong>  </string>
+    <string name="lbl_informa_senha"> Informe a senha  </string>
     <string name="senhaEmpty">Senha está vazia</string>
     <string name="btn_confirmar">Confirmar</string>
     <string name="titleCriarSenha">Criar Senha</string>
@@ -21,5 +23,40 @@
     <string name="btn_cracha_activity">Confirmar</string>
     <string name="btn_entrar">Acessar</string>
     <string name="action_settings">Settings</string>
+    <string name="reenviarEmail">Verifique sua caixa de entrada
+                                    \n
+                                Deseja reenviar e-mail?
+    </string>
+    <string name="criarNovaSenha">Criar nova senha</string>
+    <string name="alterarSenha">Alterar senha</string>
+    <string name="lbl_sim">Sim</string>
+    <string name="lbl_nao">Não</string>
+    <string name="lbl_ok">OK</string>
+    <string name="lbl_perfil">Perfil</string>
+    <string name="lbl_sair">Sair</string>
+    <string name="lbl_alterar_senha">Alterar Senha</string>
+    <string name="lbl_instrucoes">Enviamos as instruções para o e-mail cadastrado</string>
+    <string name="lbl_voltar">Voltar</string>
+    <string name="lbl_tela_termo">Termo de Uso</string>
+    <string name="lbl_tela_cardapio">Cardápio</string>
+    <string name="lbl_concorda_termo">Ao continuar, você concorda com os <b>Termos de Uso</b> da aplicação  </string>
+    <string name="lbl_texto_termo">
+Esse aplicativo é operado pelo Hospital Adventista de Manaus. Em todo o aplicativo, os termos “nós”, “nos” e “nosso” se referem ao Hospital Adventista de Manaus. O Hospital Adventista de Manaus proporciona esse aplicativo, incluindo todas as informações, ferramentas e serviços disponíveis deste aplicativo para você, o usuário, com a condição da sua aceitação de todos os termos, condições, políticas e avisos declarados aqui.
+\n\n\n
+Ao utilizar nosso aplicativo, você está utilizando nossos “Serviços”. Consequentemente, você  concorda com os seguintes termos e condições (“Termos de serviço”, “Termos”), incluindo os termos e condições e políticas adicionais mencionados neste documento.
+\n\n\n
+Por favor, leia esses Termos de serviço cuidadosamente antes de acessar ou utilizar o nosso aplicativo. Ao acessar ou usar qualquer parte do aplicativo, você concorda com os Termos de serviço. Se você não concorda com todos os termos e condições desse acordo, então você não pode acessar o aplicativo ou usar quaisquer serviços. Se esses Termos de serviço são considerados uma oferta, a aceitação é expressamente limitada a esses Termos de serviço.
+\n\n\n
+Quaisquer novos recursos ou ferramentas que forem adicionados ao aplicativo atual também devem estar sujeitos aos Termos de serviço. Você pode revisar a versão mais atual dos Termos de serviço quando quiser nesta página. Reservamos o direito de atualizar, alterar ou trocar qualquer parte desses Termos de serviço ao publicar atualizações e/ou alterações no nosso aplicativo. É sua responsabilidade verificar as alterações feitas nesta página periodicamente. Seu uso contínuo ou acesso ao aplicativo após a publicação de quaisquer alterações constitui aceitação de tais alterações.
+\n\n\n
+Você concorda em não reproduzir, duplicar, copiar, vender, revender ou explorar qualquer parte do Serviço, uso do Serviço, acesso ao Serviço, ou qualquer contato no aplicativo através do qual o serviço é fornecido, sem nossa permissão expressa por escrito.
+\n\n\n
+Não somos responsáveis por informações disponibilizadas nesse aplicativo que não sejam precisas, completas ou atuais. O material desse aplicativo é fornecido apenas para fins informativos e não deve ser usado como a única base para tomar decisões sem consultar fontes de informações primárias, mais precisas, mais completas ou mais atuais. Qualquer utilização do material desse aplicativo é por sua conta e risco.
+\n\n\n
+Esse aplicativo pode conter certas informações históricas. As informações históricas podem não ser atuais e são fornecidas apenas para sua referência. Reservamos o direito de modificar o conteúdo desse aplicativo a qualquer momento, mas nós não temos obrigação de atualizar nenhuma informação em nosso aplicativo. Você concorda que é de sua responsabilidade monitorar alterações no nosso aplicativo.
+\n\n\n
+
+As perguntas sobre os Termos de serviço devem ser enviadas para nós através do ti.contato@ham.org.br.
+</string>
 
 </resources>

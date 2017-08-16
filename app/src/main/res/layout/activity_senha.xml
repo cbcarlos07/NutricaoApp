@@ -13,26 +13,37 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:layout_weight="1"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_weight="1">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_pwd_cracha"
-            android:text="4142"
-            android:textSize="20dp"
+            android:text="@string/lbl_informa_senha"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/tamanho_label"
             android:textAlignment="center"
-            android:textColor="@color/colorPrimary"/>
+            android:layout_gravity="center"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        >
+
+        <TextView
+            android:id="@+id/tv_pwd_cracha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="4142"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/tamanho_nome" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_pwd"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_pwd_cracha">
 
             <EditText
                 android:id="@+id/et_pwd"
@@ -46,20 +57,41 @@
 
         </android.support.design.widget.TextInputLayout>
 
+
+
         <Button
             android:id="@+id/btn_pwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/botaoPadrao"
+            android:text="@string/btn_cracha_activity"
+            android:layout_below="@+id/input_layout_pwd"/>
 
-            android:text="@string/btn_cracha_activity" />
+        <TextView
+            android:id="@+id/tv_question_esqueceu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/lbl_esqueceu_senha"
+            android:textColor="@color/colorPrimaryDark"
+            android:textAlignment="center"
 
-    </LinearLayout>
+            android:layout_below="@+id/btn_pwd"/>
+
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_weight="1"/>
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+        <ProgressBar
+            android:id="@+id/progressBarSenha"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_question_esqueceu"
+             />
+    </LinearLayout>
 
 </LinearLayout>

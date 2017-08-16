@@ -69,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_sair:
                 sair();
                 break;
+            case R.id.action_alterar_senha:
+                alterarSenha();;
+                break;
 
         }
         return super.onOptionsItemSelected( item );
@@ -105,5 +108,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         mainAtivo = false;
+    }
+
+    private void alterarSenha(){
+
+        Intent intent = new Intent( this, CriarSenhaActivity.class );
+        intent.putExtra( "acao", "A" );
+        intent.putExtra( "nome", SenhaActivity.nomeBundle );
+        intent.putExtra( "email", SenhaActivity.emailBundle );
+        intent.putExtra( "cracha", SenhaActivity.crachaBundle );
+
+        startActivity( intent );
+
     }
 }

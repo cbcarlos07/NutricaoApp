@@ -6,8 +6,11 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
     </style>
-
+    <style name="PopupMenu" parent="@android:style/Widget.PopupMenu">
+        <item name="android:popupBackground">@color/colorCorpo</item>
+    </style>
 
     <style name="botaoPadrao" parent="Theme.AppCompat.Light">
         <item name="colorButtonNormal">@color/colorPrimaryDarker</item>

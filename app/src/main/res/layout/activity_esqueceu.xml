@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ham.org.br.nutricao.activity.EsqueceuActivity"
+    android:background="@color/colorCorpo">
+
+    <TextView
+
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/lbl_instrucoes"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/tamanho_label"
+        android:id="@+id/tv_msg_esqueceu"/>
+
+
+    <Button
+        android:id="@+id/btn_voltar_esqueceu"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:theme="@style/botaoPadrao"
+        android:text="Voltar"
+        android:layout_marginTop="29dp"
+        android:layout_below="@+id/tv_msg_esqueceu"
+        android:layout_alignLeft="@+id/tv_msg_esqueceu"
+        android:layout_alignStart="@+id/tv_msg_esqueceu" />
+
+    <ProgressBar
+        android:id="@+id/progressBarEsqueceu"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tv_msg_esqueceu"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="61dp" />
+
+
+</RelativeLayout>

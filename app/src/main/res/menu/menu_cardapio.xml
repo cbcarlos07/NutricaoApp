@@ -5,11 +5,17 @@
     <item
         android:id="@+id/action_perfil_card"
         android:orderInCategory="100"
-        android:title="Perfil"
+        android:title="@string/lbl_perfil"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_alterar_senha_card"
+        android:orderInCategory="100"
+        android:title="@string/lbl_alterar_senha"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_sair_card"
         android:orderInCategory="100"
-        android:title="Sair"
+        android:title="@string/lbl_sair"
         app:showAsAction="never" />
 </menu>

@@ -20,7 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_cracha"
@@ -39,13 +40,28 @@
 
         </android.support.design.widget.TextInputLayout>
 
+
         <Button
             android:id="@+id/btn_cracha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/botaoPadrao"
-
             android:text="@string/btn_cracha_activity" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/lbl_concorda_termo"
+            android:textColor="@color/colorPrimaryDarker"
+            android:textAlignment="center"
+            android:id="@+id/tv_cracha_termo"
+            />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 

@@ -29,7 +29,7 @@ import retrofit2.Response;
 public class AgendamentoRetrofitSwiper extends AsyncTask<String, String, String> {
     private Context context;
     private ListView listView;
-    private ProgressDialog dialog;
+    //private ProgressDialog dialog;
     private ArrayList<Agendamento> listaAgendamento;
     private SwipeListAdapter arrayAdapter;
 
@@ -40,16 +40,16 @@ public class AgendamentoRetrofitSwiper extends AsyncTask<String, String, String>
 
     @Override
     protected void onPreExecute() {
-        dialog = new ProgressDialog( context );
+       /* dialog = new ProgressDialog( context );
         dialog.setMessage( "Buscando agendamentos" );
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
+        dialog.show();*/
     }
 
     @Override
     protected String  doInBackground(String... strings) {
-        dialog.setMessage( "Buscando agendamentos" );
+     //   dialog.setMessage( "Buscando agendamentos" );
 
 
 
@@ -61,7 +61,7 @@ public class AgendamentoRetrofitSwiper extends AsyncTask<String, String, String>
         agdCall.enqueue( new Callback<List<Agendamento>>() {
             @Override
             public void onResponse(Call<List<Agendamento>> call, Response<List<Agendamento>> response) {
-                     Log.i("onResponse Agendamento",response.toString());
+                   //  Log.i("onResponse Agendamento",response.toString());
 
                 if( response.isSuccessful() ){
                     List<Agendamento> lstAgd = response.body();
@@ -77,7 +77,7 @@ public class AgendamentoRetrofitSwiper extends AsyncTask<String, String, String>
                 listView.setAdapter( arrayAdapter );
 
 
-                dialog.dismiss();
+               // dialog.dismiss();
 
 
 
@@ -85,7 +85,7 @@ public class AgendamentoRetrofitSwiper extends AsyncTask<String, String, String>
 
             @Override
             public void onFailure(Call<List<Agendamento>> call, Throwable t) {
-                dialog.dismiss();
+          //      dialog.dismiss();
                 //Log.i("onFailure age", t.getMessage());
                 Toast.makeText( context, "Ocorreu um problema ao buscar os dados\n"+t.getMessage(), Toast.LENGTH_LONG ).show();
             }
@@ -98,7 +98,7 @@ public class AgendamentoRetrofitSwiper extends AsyncTask<String, String, String>
     @Override
     protected void onProgressUpdate(String... values) {
 //        super.onProgressUpdate(values);
-        dialog.setMessage( "Buscando agendamentos" );
+      //  dialog.setMessage( "Buscando agendamentos" );
 
 
     }
