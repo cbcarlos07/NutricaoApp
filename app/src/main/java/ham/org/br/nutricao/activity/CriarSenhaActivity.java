@@ -220,7 +220,7 @@ public class CriarSenhaActivity extends AppCompatActivity implements View.OnClic
 
         String base64Crypt = Base64.encodeToString( dados.getBytes(), Base64.NO_WRAP );
 
-         Log.i("Campo: ", base64Crypt);
+//         Log.i("Campo: ", base64Crypt);
         // Log.i("Campo Email", usuario.getEmail());
         Call<RetornoMensagem> retornoMensagemCall = serviceAPI.getInserirUser( "S", base64Crypt );
         final ProgressDialog progressDialog = new ProgressDialog( CriarSenhaActivity.this );
