@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     tools:context="ham.org.br.nutricao.activity.PerfilActivity"
     android:background="@color/colorCorpo">
-    
+
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
