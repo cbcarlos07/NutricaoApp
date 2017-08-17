@@ -80,12 +80,7 @@ public class CriarSenhaActivity extends AppCompatActivity implements View.OnClic
 
         tv_cracha.setText( nomeBundle );
 
-        btn_criar_senha.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+        btn_criar_senha.setOnClickListener( this );
 
     }
 
@@ -162,8 +157,8 @@ public class CriarSenhaActivity extends AppCompatActivity implements View.OnClic
 
     private void criarSenha(){
         Usuario usuario = new Usuario();
-        inputLayoutSenha.setVisibility( View.INVISIBLE );
-        inputLayoutRepetirSenha.setVisibility( View.INVISIBLE );
+       // inputLayoutSenha.setVisibility( View.INVISIBLE );
+        //inputLayoutRepetirSenha.setVisibility( View.INVISIBLE );
 
         usuario.setCodigo( Integer.parseInt( cracha ) );
         usuario.setEmail( emailBundle );
@@ -178,7 +173,7 @@ public class CriarSenhaActivity extends AppCompatActivity implements View.OnClic
 
         // Log.i("Campo: ", base64Crypt);
         // Log.i("Campo Email", usuario.getEmail());
-        progressBar.setVisibility( View.VISIBLE );
+      //  progressBar.setVisibility( View.VISIBLE );
         Call<RetornoMensagem> retornoMensagemCall = serviceAPI.getInserirUser( "D", base64Crypt );
         final ProgressDialog progressDialog = new ProgressDialog( CriarSenhaActivity.this );
         progressDialog.setMessage( "Salvando dados..." );
@@ -191,9 +186,9 @@ public class CriarSenhaActivity extends AppCompatActivity implements View.OnClic
                 RetornoMensagem retornoMensagem = response.body();
                 if( retornoMensagem.getSuccess() == 1 ){
                     progressDialog.dismiss();
-                    progressBar.setVisibility( View.GONE );
-                    inputLayoutSenha.setVisibility( View.VISIBLE );
-                    inputLayoutRepetirSenha.setVisibility( View.VISIBLE );
+                    //progressBar.setVisibility( View.GONE );
+                  //  inputLayoutSenha.setVisibility( View.VISIBLE );
+                  //  inputLayoutRepetirSenha.setVisibility( View.VISIBLE );
                     dialogRetorno( "Parabéns", "Sua senha foi criada com sucesso!\nEnviamos um e-mail de confirmação." );
 
                 }
@@ -209,10 +204,10 @@ public class CriarSenhaActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void alterarSenha(){
-        progressBar.setVisibility( View.VISIBLE );
+      //  progressBar.setVisibility( View.VISIBLE );
         Usuario usuario = new Usuario();
-        inputLayoutSenha.setVisibility( View.INVISIBLE );
-        inputLayoutRepetirSenha.setVisibility( View.INVISIBLE );
+      //  inputLayoutSenha.setVisibility( View.INVISIBLE );
+      //  inputLayoutRepetirSenha.setVisibility( View.INVISIBLE );
 
         usuario.setCodigo( Integer.parseInt( cracha ) );
         usuario.setEmail( emailBundle );
@@ -239,9 +234,9 @@ public class CriarSenhaActivity extends AppCompatActivity implements View.OnClic
                 RetornoMensagem retornoMensagem = response.body();
                 if( retornoMensagem.getSuccess() == 1 ){
                     progressDialog.dismiss();
-                    progressBar.setVisibility( View.GONE );
-                    inputLayoutSenha.setVisibility( View.VISIBLE );
-                    inputLayoutRepetirSenha.setVisibility( View.VISIBLE );
+                  //  progressBar.setVisibility( View.GONE );
+                  //  inputLayoutSenha.setVisibility( View.VISIBLE );
+                   // inputLayoutRepetirSenha.setVisibility( View.VISIBLE );
                     dialogRetorno( "Parabéns", "Sua senha foi criada com sucesso!\nEnviamos um e-mail de confirmação." );
 
                 }
@@ -261,6 +256,7 @@ public class CriarSenhaActivity extends AppCompatActivity implements View.OnClic
         switch ( view.getId() ){
 
             case R.id.btn_criar_senha:
+
                 vaidarSenha();
                 break;
             case R.id.tv_criasenha:
