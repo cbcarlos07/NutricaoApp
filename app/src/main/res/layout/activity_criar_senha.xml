@@ -8,112 +8,125 @@
     android:orientation="vertical"
     android:background="@color/colorInicio">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="230dp"
-            android:layout_height="238dp"
-            android:background="@drawable/icone"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:id="@+id/tv_msg_senha"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:text="@string/criarNovaSenha"
-            android:textAlignment="center"
-            android:textColor="@color/colorCorpo"
-            android:textSize="@dimen/tamanho_label" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:padding="25dp"
-        android:id="@+id/layout_conteudo_cria_senha">
-
-
-
-        <TextView
-            android:id="@+id/tv_cracha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="4142"
-            android:textAlignment="center"
-            android:textSize="@dimen/tamanho_nome"
-            android:textColor="@color/colorCorpo"/>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_senha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:errorTextAppearance="@style/ErrorText">
-            <EditText
-                android:id="@+id/et_senha"
+            android:orientation="vertical" >
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/senha"
-                android:maxLines="1"
-                android:inputType="textPassword"/>
-        </android.support.design.widget.TextInputLayout>
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_repita_senha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:errorTextAppearance="@style/ErrorText">
-            <EditText
-                android:id="@+id/et_repita_senha"
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="230dp"
+                    android:layout_height="238dp"
+                    android:background="@drawable/icone"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/tv_msg_senha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="@string/criarNovaSenha"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorCorpo"
+                    android:textSize="@dimen/tamanho_label" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/reSenha"
-                android:maxLines="1"
-                android:inputType="textPassword"/>
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="25dp"
+                android:id="@+id/layout_conteudo_cria_senha">
 
-        </android.support.design.widget.TextInputLayout>
-        <Button
-            android:id="@+id/btn_criar_senha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/btn_confirmar"
-            android:theme="@style/botaoPadrao"/>
-        <TextView
-            android:id="@+id/tv_criasenha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="@dimen/tamanho_nome"
-            android:textColor="@color/colorCorpo"
-            android:text="@string/label_voltar"/>
 
-        <ProgressBar
-            android:id="@+id/progressBarCriaSenha"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Carregando"
-            android:textColor="@color/colorPrimary"
-            android:layout_gravity="center"
-            android:textAlignment="center"
-            android:id="@+id/tv_cria_senha_load"/>
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_cracha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="4142"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/tamanho_nome"
+                    android:textColor="@color/colorCorpo"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_senha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorTextAppearance="@style/ErrorText">
+                    <EditText
+                        android:id="@+id/et_senha"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/senha"
+                        android:maxLines="1"
+                        android:inputType="textPassword"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_repita_senha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorTextAppearance="@style/ErrorText">
+                    <EditText
+                        android:id="@+id/et_repita_senha"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/reSenha"
+                        android:maxLines="1"
+                        android:inputType="textPassword"/>
+
+                </android.support.design.widget.TextInputLayout>
+                <Button
+                    android:id="@+id/btn_criar_senha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_confirmar"
+                    android:theme="@style/botaoPadrao"/>
+                <TextView
+                    android:id="@+id/tv_criasenha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/tamanho_nome"
+                    android:textColor="@color/colorCorpo"
+                    android:text="@string/label_voltar"/>
+
+                <ProgressBar
+                    android:id="@+id/progressBarCriaSenha"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Carregando"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:id="@+id/tv_cria_senha_load"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+        </LinearLayout>
+    </ScrollView>
+
+
 
 </LinearLayout>

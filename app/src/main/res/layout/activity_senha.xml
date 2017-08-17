@@ -9,107 +9,121 @@
     android:padding="25dp"
     android:background="@color/colorInicio">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/icone" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/lbl_informa_senha"
-            android:textAlignment="center"
-            android:textColor="@color/colorCorpo"
-            android:textSize="@dimen/tamanho_label" />
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        >
-
-        <TextView
-            android:id="@+id/tv_pwd_cracha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="4142"
-            android:textAlignment="center"
-            android:textColor="@color/colorCorpo"
-            android:textSize="@dimen/tamanho_nome" />
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_pwd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_pwd_cracha"
-            app:errorTextAppearance="@style/ErrorText">
-
-            <EditText
-                android:id="@+id/et_pwd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/senha"
-                android:maxLines="1"
-                android:inputType="textPassword"/>
-
-        </android.support.design.widget.TextInputLayout>
-
-
-
-        <Button
-            android:id="@+id/btn_pwd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/botaoPadrao"
-            android:text="@string/btn_cracha_activity"
-            android:layout_below="@+id/input_layout_pwd"/>
-
-        <TextView
-            android:id="@+id/tv_question_esqueceu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/lbl_esqueceu_senha"
-            android:textColor="@color/colorCorpo"
-            android:textAlignment="center"
-
-            android:layout_below="@+id/btn_pwd"/>
-        <TextView
-            android:id="@+id/tv_infsenha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="@dimen/tamanho_nome"
-            android:textColor="@color/colorCorpo"
-            android:text="@string/label_voltar"
-            android:layout_below="@+id/tv_question_esqueceu"/>
-
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
         android:layout_weight="1">
 
-
-        <ProgressBar
-            android:id="@+id/progressBarSenha"
-            style="?android:attr/progressBarStyle"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_question_esqueceu"
-             />
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/icone" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/lbl_informa_senha"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorCorpo"
+                    android:textSize="@dimen/tamanho_label" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                >
+
+                <TextView
+                    android:id="@+id/tv_pwd_cracha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="4142"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorCorpo"
+                    android:textSize="@dimen/tamanho_nome" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_pwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_pwd_cracha"
+                    app:errorTextAppearance="@style/ErrorText">
+
+                    <EditText
+                        android:id="@+id/et_pwd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/senha"
+                        android:maxLines="1"
+                        android:inputType="textPassword"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+
+
+                <Button
+                    android:id="@+id/btn_pwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/botaoPadrao"
+                    android:text="@string/btn_cracha_activity"
+                    android:layout_below="@+id/input_layout_pwd"/>
+
+                <TextView
+                    android:id="@+id/tv_question_esqueceu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_esqueceu_senha"
+                    android:textColor="@color/colorCorpo"
+                    android:textAlignment="center"
+                    android:layout_below="@+id/btn_pwd"/>
+                <TextView
+                    android:id="@+id/tv_infsenha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/tamanho_nome"
+                    android:textColor="@color/colorCorpo"
+                    android:text="@string/label_voltar"
+                    android:layout_below="@+id/tv_question_esqueceu"/>
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+
+                <ProgressBar
+                    android:id="@+id/progressBarSenha"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_question_esqueceu"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
 
 </LinearLayout>
