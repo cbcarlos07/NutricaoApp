@@ -33,6 +33,7 @@ public class SenhaActivity extends AppCompatActivity implements View.OnClickList
     private Button btn_pwd;
     private TextView tv_pwd;
     private TextView tv_question_esqueceu;
+    private TextView tv_infsenha;
     boolean teste;
     public static String crachaBundle;
     public static String nomeBundle;
@@ -47,6 +48,7 @@ public class SenhaActivity extends AppCompatActivity implements View.OnClickList
         btn_pwd          = ( Button ) findViewById( R.id.btn_pwd );
         et_pwd           = ( EditText ) findViewById( R.id.et_pwd );
         tv_pwd           = ( TextView ) findViewById( R.id.tv_pwd_cracha );
+        tv_infsenha      = ( TextView ) findViewById( R.id.tv_infsenha );
         tv_question_esqueceu  = ( TextView ) findViewById( R.id.tv_question_esqueceu );
         progressBar      = ( ProgressBar ) findViewById( R.id.progressBarSenha );
         progressBar.setVisibility( View.INVISIBLE );
@@ -60,6 +62,7 @@ public class SenhaActivity extends AppCompatActivity implements View.OnClickList
 
         btn_pwd.setOnClickListener( this );
         tv_question_esqueceu.setOnClickListener( this );
+        tv_infsenha.setOnClickListener( this );
 
         
     }
@@ -196,9 +199,18 @@ public class SenhaActivity extends AppCompatActivity implements View.OnClickList
                 esqueceuSenha();
                 //Log.i("Esqueceu", "Esqueceu clicado");
                 break;
+            case R.id.tv_infsenha:
+                voltarAoCracha();
+                break;
 
         }
 
 
+    }
+
+    private void voltarAoCracha(){
+        Intent intent = new Intent( SenhaActivity.this, CrachaActivity.class );
+        startActivity( intent );
+        finish();
     }
 }

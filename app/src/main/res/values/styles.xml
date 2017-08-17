@@ -8,6 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:popupMenuStyle">@style/PopupMenu</item>
         <item name="android:textColorHint">@color/colorHint</item>
+        <item name="android:textColorHighlight">@color/colorCorpo</item>
+
     </style>
     <style name="PopupMenu" parent="@android:style/Widget.PopupMenu">
         <item name="android:popupBackground">@color/colorCorpo</item>
@@ -31,6 +33,11 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
         <item name="android:background">@color/colorAccent</item>
+    </style>
+
+    <style name="ErrorText" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
     </style>
 
 </resources>

@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#FB8C00</color> <!-- barra de titulo -->
     <color name="colorPrimaryDark">#E65100</color> <!-- barra superior -->
-    <color name="colorAccent">#F57C00</color>
+    <color name="colorAccent">#FFB74D</color>
     <color name="colorToolbar">#EF6C00</color>
     <color name="colorTabView">#F57C00</color>
     <color name="colorTabIndicator">#E65100</color>
@@ -14,8 +14,10 @@
     <color name="colorNormalAgendar">#009688</color>
     <color name="colorControlHighlightCancelar">#E57373</color>
     <color name="colortitleGroup">#E65100</color>
-    <color name="colorHint">#FFE0B2</color>
+    <color name="colorHint">#E65100</color>
     <color name="colorTexto">#E65100</color>
     <color name="colorInicio">#f58434</color>
+    <color name="colorCampo">#f39d5f</color>
+    <color name="colorHintHighlight">#E65100</color>
 
 </resources>

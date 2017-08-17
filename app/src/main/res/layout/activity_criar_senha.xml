@@ -18,7 +18,7 @@
             android:id="@+id/imageView3"
             android:layout_width="230dp"
             android:layout_height="238dp"
-            android:background="@drawable/ICONE2"
+            android:background="@drawable/icone"
             android:layout_gravity="center"/>
 
         <TextView
@@ -54,31 +54,29 @@
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_senha"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:errorTextAppearance="@style/ErrorText">
             <EditText
                 android:id="@+id/et_senha"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/senha"
                 android:maxLines="1"
-                android:inputType="textPassword"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="@color/colorPrimaryDark"/>
+                android:inputType="textPassword"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_repita_senha"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:errorTextAppearance="@style/ErrorText">
             <EditText
                 android:id="@+id/et_repita_senha"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/reSenha"
                 android:maxLines="1"
-                android:inputType="textPassword"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="@color/colorPrimaryDark"/>
+                android:inputType="textPassword"/>
 
         </android.support.design.widget.TextInputLayout>
         <Button
@@ -87,6 +85,14 @@
             android:layout_height="wrap_content"
             android:text="@string/btn_confirmar"
             android:theme="@style/botaoPadrao"/>
+        <TextView
+            android:id="@+id/tv_criasenha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="@dimen/tamanho_nome"
+            android:textColor="@color/colorCorpo"
+            android:text="@string/label_voltar"/>
 
         <ProgressBar
             android:id="@+id/progressBarCriaSenha"

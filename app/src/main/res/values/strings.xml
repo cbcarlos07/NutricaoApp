@@ -19,7 +19,7 @@
     <string name="btn_confirmar">Confirmar</string>
     <string name="titleCriarSenha">Criar Senha</string>
     <string name="senhaMenorQue8">Informa pelo menos 08 caracteres</string>
-    <string name="title_activity_perfil">Nutrição</string>
+    <string name="title_activity_perfil"></string>
     <string name="btn_cracha_activity">Confirmar</string>
     <string name="btn_entrar">Acessar</string>
     <string name="action_settings">Settings</string>
@@ -37,6 +37,7 @@
     <string name="lbl_alterar_senha">Alterar Senha</string>
     <string name="lbl_instrucoes">Enviamos as instruções para o e-mail cadastrado</string>
     <string name="lbl_voltar">Voltar</string>
+    <string name="label_voltar"><b>Voltar</b></string>
     <string name="lbl_tela_termo">Termo de Uso</string>
     <string name="lbl_tela_cardapio">Cardápio</string>
     <string name="lbl_concorda_termo">Ao continuar, você concorda com os <b>Termos de Uso</b> da aplicação  </string>
@@ -59,6 +60,7 @@ Esse aplicativo pode conter certas informações históricas. As informações h
 
 As perguntas sobre os Termos de serviço devem ser enviadas para nós através do ti.contato@ham.org.br.
 </string>
-    <string name="lbl_config">Hospital Adventista de Manaus\nDepartamento de Tecnologia de Informação</string>
+    <string name="lbl_config">Hospital Adventista de Manaus\nDepartamento de Tecnologia da Informação</string>
+
 
 </resources>

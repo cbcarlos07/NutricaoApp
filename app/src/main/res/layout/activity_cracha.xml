@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:srcCompat="@drawable/ICONE2" />
+            app:srcCompat="@drawable/icone" />
     </LinearLayout>
 
     <LinearLayout
@@ -34,7 +34,8 @@
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_cracha"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:errorTextAppearance="@style/ErrorText">
 
             <EditText
                 android:id="@+id/et_cracha"
@@ -42,8 +43,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/cracha"
                 android:maxLines="1"
-                android:inputType="number"
-                android:background="@color/colorAccent" />
+                android:inputType="number"/>
 
         </android.support.design.widget.TextInputLayout>
 

@@ -27,7 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CriarSenhaActivity extends AppCompatActivity {
+public class CriarSenhaActivity extends AppCompatActivity implements View.OnClickListener{
     private TextInputLayout inputLayoutSenha;
     private TextInputLayout inputLayoutRepetirSenha;
     private Button btn_criar_senha;
@@ -36,6 +36,7 @@ public class CriarSenhaActivity extends AppCompatActivity {
     private TextView tv_cracha;
     private TextView tv_msg_senha;
     private TextView tv_cria_senha_load;
+    private TextView tv_cria_senha;
     private String nomeBundle;
     private String emailBundle;
     private char acao;
@@ -54,6 +55,7 @@ public class CriarSenhaActivity extends AppCompatActivity {
         reSenha                 = ( EditText ) findViewById( R.id.et_repita_senha );
         tv_cracha               = ( TextView ) findViewById( R.id.tv_cracha );
         tv_cria_senha_load      = ( TextView ) findViewById( R.id.tv_cria_senha_load );
+        tv_cria_senha           = ( TextView ) findViewById( R.id.tv_criasenha );
         tv_msg_senha            = ( TextView ) findViewById( R.id.tv_msg_senha );
         progressBar             = ( ProgressBar ) findViewById( R.id.progressBarCriaSenha );
         progressBar.setVisibility( View.INVISIBLE );
@@ -81,7 +83,7 @@ public class CriarSenhaActivity extends AppCompatActivity {
         btn_criar_senha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                vaidarSenha();
+
             }
         });
 
@@ -254,6 +256,20 @@ public class CriarSenhaActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onClick(View view) {
+        switch ( view.getId() ){
+
+            case R.id.btn_criar_senha:
+                vaidarSenha();
+                break;
+            case R.id.tv_criasenha:
+                voltarAoCracha();
+                break;
+
+        }
+    }
+
 
     private class MyTextWatcher implements TextWatcher {
 
@@ -300,6 +316,12 @@ public class CriarSenhaActivity extends AppCompatActivity {
         AlertDialog aviso = dialog.create();
         aviso.show();
 
+    }
+
+    private void voltarAoCracha(){
+        Intent intent = new Intent( CriarSenhaActivity.this, CrachaActivity.class );
+        startActivity( intent );
+        finish();
     }
 
 }

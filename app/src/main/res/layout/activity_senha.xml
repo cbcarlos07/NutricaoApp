@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:srcCompat="@drawable/ICONE2" />
+            app:srcCompat="@drawable/icone" />
 
         <TextView
             android:layout_width="match_parent"
@@ -44,14 +44,15 @@
             android:layout_height="wrap_content"
             android:text="4142"
             android:textAlignment="center"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorCorpo"
             android:textSize="@dimen/tamanho_nome" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_pwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_pwd_cracha">
+            android:layout_below="@+id/tv_pwd_cracha"
+            app:errorTextAppearance="@style/ErrorText">
 
             <EditText
                 android:id="@+id/et_pwd"
@@ -59,9 +60,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/senha"
                 android:maxLines="1"
-                android:inputType="textPassword"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="@color/colorPrimaryDark"/>
+                android:inputType="textPassword"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -84,6 +83,16 @@
             android:textAlignment="center"
 
             android:layout_below="@+id/btn_pwd"/>
+        <TextView
+            android:id="@+id/tv_infsenha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="@dimen/tamanho_nome"
+            android:textColor="@color/colorCorpo"
+            android:text="@string/label_voltar"
+            android:layout_below="@+id/tv_question_esqueceu"/>
+
 
     </RelativeLayout>
 
@@ -92,6 +101,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_weight="1">
+
 
         <ProgressBar
             android:id="@+id/progressBarSenha"
