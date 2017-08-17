@@ -7,6 +7,8 @@
     <color name="colorTabView">#F57C00</color>
     <color name="colorTabIndicator">#E65100</color>
     <color name="colorCorpo">#FFE0B2</color>
+    <color name="tabSelecionado">#FFFFFF</color>
+    <color name="tabNaoSelecionado">#EF6C00</color>
     <color name="colorIcone">#9fa8da</color>
     <color name="colorTextoList">#E65100</color>
     <color name="colorPrimaryDarker">#E65100</color>

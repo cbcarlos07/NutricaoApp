@@ -81,6 +81,9 @@ public class CriarSenhaActivity extends AppCompatActivity implements View.OnClic
         tv_cracha.setText( nomeBundle );
 
         btn_criar_senha.setOnClickListener( this );
+        tv_cria_senha.setOnClickListener( this );
+
+
 
     }
 
@@ -315,9 +318,16 @@ public class CriarSenhaActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void voltarAoCracha(){
-        Intent intent = new Intent( CriarSenhaActivity.this, CrachaActivity.class );
-        startActivity( intent );
-        finish();
+        Intent intent;
+        if( acao == 'C'  ) {
+            intent = new Intent(CriarSenhaActivity.this, CrachaActivity.class);
+            startActivity(intent);
+            finish();
+        }else{
+            intent = new Intent(CriarSenhaActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
 }
