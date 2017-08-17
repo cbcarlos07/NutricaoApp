@@ -21,8 +21,9 @@
             android:layout_gravity="bottom"
             android:text="@string/criarNovaSenha"
             android:textAlignment="center"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/tamanho_label" />
+            android:textColor="@color/colorTexto"
+            android:textSize="@dimen/tamanho_label"
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -42,7 +43,7 @@
             android:text="4142"
             android:textAlignment="center"
             android:textSize="@dimen/tamanho_nome"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="@color/colorTexto"/>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_senha"

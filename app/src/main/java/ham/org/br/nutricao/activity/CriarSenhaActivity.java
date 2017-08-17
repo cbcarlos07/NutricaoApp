@@ -163,7 +163,7 @@ public class CriarSenhaActivity extends AppCompatActivity {
         inputLayoutSenha.setVisibility( View.INVISIBLE );
         inputLayoutRepetirSenha.setVisibility( View.INVISIBLE );
 
-        usuario.setCodigo( Integer.parseInt( tv_cracha.getText().toString() ) );
+        usuario.setCodigo( Integer.parseInt( cracha ) );
         usuario.setEmail( emailBundle );
         usuario.setNome( nomeBundle );
         usuario.setSenha( senha.getText().toString() );

@@ -40,6 +40,7 @@
     <string name="lbl_tela_termo">Termo de Uso</string>
     <string name="lbl_tela_cardapio">Cardápio</string>
     <string name="lbl_concorda_termo">Ao continuar, você concorda com os <b>Termos de Uso</b> da aplicação  </string>
+
     <string name="lbl_texto_termo">
 Esse aplicativo é operado pelo Hospital Adventista de Manaus. Em todo o aplicativo, os termos “nós”, “nos” e “nosso” se referem ao Hospital Adventista de Manaus. O Hospital Adventista de Manaus proporciona esse aplicativo, incluindo todas as informações, ferramentas e serviços disponíveis deste aplicativo para você, o usuário, com a condição da sua aceitação de todos os termos, condições, políticas e avisos declarados aqui.
 \n\n\n
@@ -58,5 +59,6 @@ Esse aplicativo pode conter certas informações históricas. As informações h
 
 As perguntas sobre os Termos de serviço devem ser enviadas para nós através do ti.contato@ham.org.br.
 </string>
+    <string name="lbl_config">Hospital Adventista de Manaus\nDepartamento de Tecnologia de Informação</string>
 
 </resources>

@@ -8,13 +8,21 @@
     tools:context="ham.org.br.nutricao.activity.CrachaActivity"
     android:orientation="vertical"
     android:padding="25dp"
-    android:background="@color/colorCorpo">
+    android:background="@color/colorInicio">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:layout_weight="1"/>
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ICONE2" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,8 +43,7 @@
                 android:hint="@string/cracha"
                 android:maxLines="1"
                 android:inputType="number"
-                android:textColorHint="@color/colorTextoList"
-                android:textColor="@color/colorPrimary"/>
+                android:background="@color/colorAccent" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -52,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/lbl_concorda_termo"
-            android:textColor="@color/colorPrimaryDarker"
+            android:textColor="@color/colorCorpo"
             android:textAlignment="center"
             android:id="@+id/tv_cracha_termo"
             />

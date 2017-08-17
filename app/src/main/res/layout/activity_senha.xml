@@ -7,21 +7,29 @@
     tools:context="ham.org.br.nutricao.activity.SenhaActivity"
     android:orientation="vertical"
     android:padding="25dp"
-    android:background="@color/colorCorpo">
+    android:background="@color/colorInicio">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ICONE2" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/lbl_informa_senha"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/tamanho_label"
             android:textAlignment="center"
-            android:layout_gravity="center"/>
+            android:textColor="@color/colorCorpo"
+            android:textSize="@dimen/tamanho_label" />
     </LinearLayout>
 
     <RelativeLayout
@@ -72,7 +80,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/lbl_esqueceu_senha"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/colorCorpo"
             android:textAlignment="center"
 
             android:layout_below="@+id/btn_pwd"/>

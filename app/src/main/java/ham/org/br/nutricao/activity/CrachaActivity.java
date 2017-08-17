@@ -88,7 +88,7 @@ public class CrachaActivity extends AppCompatActivity implements View.OnClickLis
 
                                     intent.putExtra( "nome", nome );
                                     intent.putExtra( "email", email );
-                                    intent.putExtra( "acao", 'C' );
+                                    intent.putExtra( "acao", "C" );
                                     startActivity( intent );
                                     finish();
                                     break;
