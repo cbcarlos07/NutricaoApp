@@ -1,6 +1,7 @@
 package ham.org.br.nutricao.activity;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,7 +34,7 @@ public class CrachaActivity extends AppCompatActivity implements View.OnClickLis
     private String nome;
     private String email;
     private boolean teste;
-    private ProgressBar progressBar;
+    private ProgressDialog progressDialog;
     private TextView tv_cracha_termo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +46,9 @@ public class CrachaActivity extends AppCompatActivity implements View.OnClickLis
         input_layout_cracha = (TextInputLayout) findViewById( R.id.input_layout_cracha );
         btn_cracha          = (Button) findViewById( R.id.btn_cracha );
         et_cracha           = (EditText) findViewById( R.id.et_cracha );
-        progressBar         = ( ProgressBar ) findViewById( R.id.progressBar );
+       // progressBar         = ( ProgressBar ) findViewById( R.id.progressBar );
         tv_cracha_termo     = ( TextView ) findViewById( R.id.tv_cracha_termo );
-        progressBar.setVisibility( View.GONE );
+     //   progressBar.setVisibility( View.GONE );
 
 
         btn_cracha.setOnClickListener( this );
@@ -62,14 +63,14 @@ public class CrachaActivity extends AppCompatActivity implements View.OnClickLis
             teste = false;
         } else {
             input_layout_cracha.setErrorEnabled( false );
-
+            loadingMessage( "Buscando dados. Aguarde" );
             ServiceAPI serviceAPI = ServiceAPI.retrofit.create( ServiceAPI.class );
             Call<CrachaValida> crachaValidaCall = serviceAPI.getRetornoCracha( "C", et_cracha.getText().toString() );
             crachaValidaCall.enqueue(new Callback<CrachaValida>() {
                 @Override
                 public void onResponse(Call<CrachaValida> call, Response<CrachaValida> response) {
                     if( response.isSuccessful() ){
-
+                        closeLoadingMessa();
                         CrachaValida crachaValidaResponse = response.body();
                         if( crachaValidaResponse.getSuccess() == 1 ){
 
@@ -123,7 +124,8 @@ public class CrachaActivity extends AppCompatActivity implements View.OnClickLis
 
                 @Override
                 public void onFailure(Call<CrachaValida> call, Throwable t) {
-                    mensagemToast( "Ocorreu um problema ao conectar: \n"+t.getMessage() );
+                    closeLoadingMessa();
+                    dialogAlertErro( "Ops","Ocorreu um problema ao conectar: \n"+t.getMessage() );
                 }
             });
 
@@ -173,29 +175,27 @@ public class CrachaActivity extends AppCompatActivity implements View.OnClickLis
         String base64 = Base64.encodeToString( envio.getBytes(), Base64.NO_WRAP );
       //  Log.i("Envio", base64);
 
-        progressBar.setVisibility( View.VISIBLE );
-        btn_cracha.setVisibility( View.INVISIBLE );
-        et_cracha.setVisibility( View.INVISIBLE );
-
+        loadingMessage( "Processando solicitação. Aguarde" );
         final Call<RetornoMensagem> retornoMensagemCall = serviceAPI.reenviarEmail( "E", base64 );
         retornoMensagemCall.enqueue(new Callback<RetornoMensagem>() {
             @Override
             public void onResponse(Call<RetornoMensagem> call, Response<RetornoMensagem> response) {
+                if( response.isSuccessful() ){
+                    closeLoadingMessa();
+                    int retornoMensagemResponse = response.body().getSuccess();
+                    if( retornoMensagemResponse == 1 ){
+                        dialogAlert( "Parabéns!", "O e-mail de confirmação foi enviado para o seu e-mail" );
 
-                int retornoMensagemResponse = response.body().getSuccess();
-                if( retornoMensagemResponse == 1 ){
-                    dialogAlert( "Parabéns!", "O e-mail de confirmação foi enviado para o seu e-mail" );
-                    progressBar.setVisibility( View.GONE );
-                    btn_cracha.setVisibility( View.VISIBLE );
-                    et_cracha.setVisibility( View.VISIBLE );
+                    }
                 }
+
 
             }
 
             @Override
             public void onFailure(Call<RetornoMensagem> call, Throwable t) {
-
-                dialogAlert( "Ops", "Ocorreu um erro ao processar requisição\n"+t.getMessage() );
+                closeLoadingMessa();
+                dialogAlertErro( "Ops", "Ocorreu um erro ao processar requisição\n"+t.getMessage() );
 
             }
         });
@@ -218,11 +218,26 @@ public class CrachaActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
+    private void dialogAlertErro( String titulo, String mensagem  ){
+        AlertDialog.Builder alert = new AlertDialog.Builder( CrachaActivity.this  );
+        alert.setTitle( titulo );
+        alert.setMessage( mensagem );
+        alert.setNeutralButton(getString(R.string.lbl_ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                System.exit( 0 );
+            }
+        });
+
+        AlertDialog aviso = alert.create();
+        aviso.show();
+    }
+
     private void dialogAlert( String titulo, String mensagem  ){
         AlertDialog.Builder alert = new AlertDialog.Builder( CrachaActivity.this  );
         alert.setTitle( titulo );
         alert.setMessage( mensagem );
-        alert.setNeutralButton( getString( R.string.lbl_ok ), null );
+        alert.setNeutralButton(getString(R.string.lbl_ok), null);
 
         AlertDialog aviso = alert.create();
         aviso.show();
@@ -244,5 +259,17 @@ public class CrachaActivity extends AppCompatActivity implements View.OnClickLis
     private void abrirTermo( ){
         Intent intent = new Intent( CrachaActivity.this, TermoActivity.class );
         startActivity( intent );
+    }
+
+    private void loadingMessage(  String msg ){
+        progressDialog = new ProgressDialog( CrachaActivity.this );
+        progressDialog.setCancelable( false );
+        progressDialog.setCanceledOnTouchOutside( false );
+        progressDialog.setMessage( msg );
+        progressDialog.show();
+    }
+
+    private void closeLoadingMessa(){
+        progressDialog.dismiss();
     }
 }

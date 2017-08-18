@@ -70,16 +70,5 @@ public class AgendamentosFragment extends Fragment implements SwipeRefreshLayout
         buscarDados();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        buscarDados();
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        buscarDados();
-
-    }
 }

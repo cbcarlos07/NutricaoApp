@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Nutricao.iml" filepath="$PROJECT_DIR$/Nutricao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/NutricaoApp.iml" filepath="$PROJECT_DIR$/NutricaoApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

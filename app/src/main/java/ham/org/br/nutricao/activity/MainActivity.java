@@ -96,7 +96,9 @@ public class MainActivity extends AppCompatActivity {
         slidingTabLayout.setSelectedIndicatorColors(ContextCompat.getColor( this, R.color.colorTabIndicator ));
         slidingTabLayout.setViewPager( viewPager );*/
 
-
+        TabLayout.Tab tab = tabLayout.getTabAt( 1 );
+        int tabIconColor = ContextCompat.getColor(MainActivity.this, R.color.tabNaoSelecionado );
+        tab.getIcon().setColorFilter( tabIconColor, PorterDuff.Mode.SRC_IN );
 
 
 
@@ -113,9 +115,7 @@ public class MainActivity extends AppCompatActivity {
         //
         tabLayout.getTabAt( 0 ).setIcon( drawable1 );
         tabLayout.getTabAt( 1 ).setIcon( drawable2 );
-        TabLayout.Tab tab = tabLayout.getTabAt( 1 );
-        int tabIconColor = ContextCompat.getColor(MainActivity.this, R.color.tabNaoSelecionado );
-        tab.getIcon().setColorFilter( tabIconColor, PorterDuff.Mode.SRC_IN );
+
 
 
 
@@ -200,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra( "cracha", SenhaActivity.crachaBundle );
 
         startActivity( intent );
+        finish();
 
     }
 }

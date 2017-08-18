@@ -205,6 +205,8 @@ public class CardapioActivity extends AppCompatActivity {
                 AlertDialog dialog = builder.create();
                 dialog.show();
 
+                btn_acao.setVisibility( View.INVISIBLE );
+
             }
         });
 
