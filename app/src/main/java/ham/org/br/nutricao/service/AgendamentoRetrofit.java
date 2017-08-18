@@ -3,7 +3,11 @@ package ham.org.br.nutricao.service;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import ham.org.br.nutricao.R;
 import ham.org.br.nutricao.activity.CardapioActivity;
 import ham.org.br.nutricao.adapter.AgendaAdapter;
 import ham.org.br.nutricao.model.Agendamento;
@@ -92,7 +97,14 @@ public class AgendamentoRetrofit extends AsyncTask<String, String, String> {
             public void onFailure(Call<List<Agendamento>> call, Throwable t) {
                 dialog.dismiss();
                 //Log.i("onFailure age", t.getMessage());
-                Toast.makeText( context, "Ocorreu um problema ao buscar os dados\n"+t.getMessage(), Toast.LENGTH_LONG ).show();
+                if( !isOnline() ){
+
+                    dialogAlert( "Ops","Ocorreu um problema ao conectar\nPor favor verique sua conexão" );
+                }else{
+                    dialogAlert( "Ops","Ocorreu um problema ao buscar os dados" );
+                }
+
+              //  Toast.makeText( context, "Ocorreu um problema ao buscar os dados\n"+t.getMessage(), Toast.LENGTH_LONG ).show();
             }
         });
 
@@ -125,5 +137,23 @@ public class AgendamentoRetrofit extends AsyncTask<String, String, String> {
 
             }
         });
+    }
+
+    private void dialogAlert( String titulo, String mensagem  ){
+        //   AlertDialog.Builder alert = new AlertDialog.Builder( CrachaActivity.this  );
+        AlertDialog.Builder alert = new AlertDialog.Builder( new ContextThemeWrapper( context , R.style.AlertDialogCustom )  );
+        alert.setTitle( titulo );
+        alert.setMessage( mensagem );
+        alert.setNeutralButton( context.getString(R.string.lbl_ok), null);
+
+        AlertDialog aviso = alert.create();
+        aviso.show();
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }

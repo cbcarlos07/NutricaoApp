@@ -2,11 +2,15 @@ package ham.org.br.nutricao.activity;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.ContextThemeWrapper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
@@ -248,7 +252,13 @@ public class CriarSenhaActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onFailure(Call<RetornoMensagem> call, Throwable t) {
                 progressDialog.dismiss();
-                dialogRetorno( "Erro", "Erro ao tentar salvar\n"+t.getMessage() );
+                if( !isOnline() ){
+                    dialogRetorno( "Ops", "Ocorreu um problema ao conectar\nPor favor verique sua conexão" );
+
+                }else{
+                    dialogRetorno( "Erro", "Erro ao tentar salvar" );
+                }
+
 
             }
         });
@@ -298,7 +308,7 @@ public class CriarSenhaActivity extends AppCompatActivity implements View.OnClic
 
     private void dialogRetorno( String titulo, String msg ){
 
-        AlertDialog.Builder dialog = new AlertDialog.Builder( CriarSenhaActivity.this );
+        AlertDialog.Builder dialog = new AlertDialog.Builder( new ContextThemeWrapper( CriarSenhaActivity.this , R.style.AlertDialogCustom ) );
         dialog.setTitle( titulo );
         dialog.setMessage( msg );
         dialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
@@ -329,5 +339,14 @@ public class CriarSenhaActivity extends AppCompatActivity implements View.OnClic
             finish();
         }
     }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+
 
 }

@@ -4,12 +4,16 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -155,7 +159,7 @@ public class CardapioActivity extends AppCompatActivity {
 
                     if( !mensagem.getMotivo().equals("") ){
 
-                        abrirMensagem( "Atenção!", mensagem.getMotivo() );
+                        dialogAlert( "Atenção!", mensagem.getMotivo() );
 
                     }else{
                         btn_acao.setText( "Agendar" );
@@ -196,14 +200,11 @@ public class CardapioActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Mensagem> call, Throwable t) {
                 //Log.i("onFailure Mensagem", t.getMessage());
-                AlertDialog.Builder builder = new AlertDialog.Builder( CardapioActivity.this );
-                builder.setTitle("Ops");
-                builder.setMessage("Ocorreu um erro:\n"+t.getMessage());
-
-                builder.setPositiveButton("OK", null);
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                if( !isOnline() ){
+                    dialogAlert( "Ops","Ocorreu um problema ao conectar\nPor favor verique sua conexão" );
+                }else{
+                    dialogAlert( "Ops","Ocorreu um problema ao salvar operação\nTente novamente mais tarde" );
+                }
 
                 btn_acao.setVisibility( View.INVISIBLE );
 
@@ -270,14 +271,13 @@ public class CardapioActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Mensagem> call, Throwable t) {
                 //Log.i("onFailure Mensagem", t.getMessage());
-                AlertDialog.Builder builder = new AlertDialog.Builder( CardapioActivity.this );
-                builder.setTitle("Ops");
-                builder.setMessage("Ocorreu um erro:\n"+t.getMessage());
+                if( !isOnline() ){
+                    dialogAlert( "Ops","Ocorreu um problema ao conectar\nPor favor verique sua conexão" );
+                }else{
+                    dialogAlert( "Ops","Ocorreu um problema ao salvar operação\nTente novamente mais tarde" );
+                }
 
-                builder.setPositiveButton("OK", null);
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                btn_acao.setVisibility( View.INVISIBLE );
 
             }
         });
@@ -446,9 +446,16 @@ public class CardapioActivity extends AppCompatActivity {
             public void onFailure(Call<RetornoMensagem> call, Throwable t) {
                 //Log.i("onFailure TipoPrato", t.getMessage());
                 dialog.dismiss();
+                if( !isOnline() ){
+                    dialogAlert( "Ops","Ocorreu um problema ao conectar\nPor favor verique sua conexão" );
+                }else{
+                    dialogAlert( "Ops","Ocorreu um problema ao salvar operação\nTente novamente mais tarde" );
+                }
+
+
                 //Log.i("onFailure age", t.getMessage());
                 //Toast.makeText( context, , Toast.LENGTH_LONG ).show();
-                dialogMensagem( "Ops", "Ocorreu um problema ao salvar operação\nTente novamente mais tarde\n"+t.getMessage() );
+                //dialogMensagem( "Ops", "Ocorreu um problema ao salvar operação\nTente novamente mais tarde\n"+t.getMessage() );
 
             }
         });
@@ -537,6 +544,25 @@ public class CardapioActivity extends AppCompatActivity {
 
         startActivity( intent );
 
+    }
+
+
+    private void dialogAlert( String titulo, String mensagem  ){
+        //   AlertDialog.Builder alert = new AlertDialog.Builder( CrachaActivity.this  );
+        android.support.v7.app.AlertDialog.Builder alert = new android.support.v7.app.AlertDialog.Builder( new ContextThemeWrapper( CardapioActivity.this , R.style.AlertDialogCustom )  );
+        alert.setTitle( titulo );
+        alert.setMessage( mensagem );
+        alert.setNeutralButton( getString(R.string.lbl_ok), null);
+
+        android.support.v7.app.AlertDialog aviso = alert.create();
+        aviso.show();
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
 

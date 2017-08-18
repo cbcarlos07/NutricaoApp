@@ -1,9 +1,13 @@
 package ham.org.br.nutricao.service;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -101,7 +105,15 @@ public class TipoRefeicaoRetrofit extends AsyncTask<String, String, ArrayList<Ti
                // Log.i("onFailure TipoRefeicao", t.getMessage());
                 dialog.dismiss();
                 //Log.i("onFailure age", t.getMessage());
-                Toast.makeText( context, "Ocorreu um problema ao buscar os dados\n"+t.getMessage(), Toast.LENGTH_LONG ).show();
+                if( !isOnline() ){
+                    mensagemDialog("Ops","Ocorreu um problema ao conectar\nPor favor verique sua conexão" );
+
+                }else{
+                    //Toast.makeText( context, "Ocorreu um problema ao buscar os dados\n"+t.getMessage(), Toast.LENGTH_LONG ).show();
+                    mensagemDialog("Ops","Ocorreu um problema ao buscar os dados" );
+                }
+
+
             }
         });
 
@@ -133,4 +145,27 @@ public class TipoRefeicaoRetrofit extends AsyncTask<String, String, ArrayList<Ti
             }
         });
     }
+
+    private void mensagemDialog( String title, String msg ){
+
+        AlertDialog.Builder alert = new AlertDialog.Builder( new ContextThemeWrapper(context , R.style.AlertDialogCustom ) );
+        alert.setTitle( title );
+        alert.setMessage( msg );
+        alert.setNeutralButton( context.getString( R.string.lbl_ok ), null );
+
+        AlertDialog aviso = alert.create();
+        aviso.show();
+
+    }
+
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+
+
 }

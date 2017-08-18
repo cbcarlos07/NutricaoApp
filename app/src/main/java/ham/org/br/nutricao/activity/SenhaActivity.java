@@ -1,10 +1,15 @@
 package ham.org.br.nutricao.activity;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.ContextThemeWrapper;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -175,12 +180,13 @@ public class SenhaActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onFailure(Call<RetornoMensagem> call, Throwable t) {
 
-                AlertDialog.Builder alerta = new AlertDialog.Builder( SenhaActivity.this );
-                alerta.setTitle( "Ops" );
-                alerta.setMessage( "Não foi possível processar a requisição: "+t.getMessage() );
-                alerta.setNeutralButton( getString( R.string.lbl_ok ), null );
-                AlertDialog aviso = alerta.create();
-                aviso.show();
+                if( !isOnline() ){
+                    dialogAlert( "Ops", "Verifique sua conexão" );
+                }else{
+                    dialogAlert( "Ops", "Não foi possível processar a requisição" );
+                }
+
+
 
 
             }
@@ -212,5 +218,24 @@ public class SenhaActivity extends AppCompatActivity implements View.OnClickList
         Intent intent = new Intent( SenhaActivity.this, CrachaActivity.class );
         startActivity( intent );
         finish();
+    }
+
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    private void dialogAlert( String titulo, String mensagem  ){
+        //   AlertDialog.Builder alert = new AlertDialog.Builder( CrachaActivity.this  );
+        AlertDialog.Builder alert = new AlertDialog.Builder( new ContextThemeWrapper( SenhaActivity.this , R.style.AlertDialogCustom )  );
+        alert.setTitle( titulo );
+        alert.setMessage( mensagem );
+        alert.setNeutralButton( getString(R.string.lbl_ok), null);
+
+        AlertDialog aviso = alert.create();
+        aviso.show();
     }
 }

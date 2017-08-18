@@ -2,19 +2,21 @@ package ham.org.br.nutricao.activity;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.ContextThemeWrapper;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -125,7 +127,20 @@ public class CrachaActivity extends AppCompatActivity implements View.OnClickLis
                 @Override
                 public void onFailure(Call<CrachaValida> call, Throwable t) {
                     closeLoadingMessa();
-                    dialogAlertErro( "Ops","Ocorreu um problema ao conectar: \n"+t.getMessage() );
+                    if( !isOnline() ){
+                        dialogAlertErro( "Ops","Ocorreu um problema ao conectar" );
+                    }else{
+                        dialogAlertErro( "Ops","Não foi possível recuperar informação");
+                    }
+                   /* if( t.hashCode() == 156572836 ){
+                        dialogAlertErro( "Ops","Ocorreu um problema ao conectar" );
+                    }else{
+
+                        dialogAlertErro( "Ops","Não foi possível recuperar informação");
+                        Log.i( "Erro retrofit", ""+t );
+                    }*/
+
+
                 }
             });
 
@@ -150,7 +165,7 @@ public class CrachaActivity extends AppCompatActivity implements View.OnClickLis
 
     private void dialogAlert( String mensagem ){
 
-        AlertDialog.Builder dialog = new AlertDialog.Builder( CrachaActivity.this );
+        AlertDialog.Builder dialog = new AlertDialog.Builder( new ContextThemeWrapper(CrachaActivity.this , R.style.AlertDialogCustom ) );
         dialog.setTitle( "E-mail" );
         dialog.setMessage( mensagem );
         dialog.setPositiveButton(getString(R.string.lbl_sim), new DialogInterface.OnClickListener() {
@@ -180,14 +195,17 @@ public class CrachaActivity extends AppCompatActivity implements View.OnClickLis
         retornoMensagemCall.enqueue(new Callback<RetornoMensagem>() {
             @Override
             public void onResponse(Call<RetornoMensagem> call, Response<RetornoMensagem> response) {
-                if( response.isSuccessful() ){
-                    closeLoadingMessa();
-                    int retornoMensagemResponse = response.body().getSuccess();
-                    if( retornoMensagemResponse == 1 ){
-                        dialogAlert( "Parabéns!", "O e-mail de confirmação foi enviado para o seu e-mail" );
+
+
+                    if( response.isSuccessful() ) {
+                        closeLoadingMessa();
+                        int retornoMensagemResponse = response.body().getSuccess();
+                        if (retornoMensagemResponse == 1) {
+                            dialogAlert("Parabéns!", "O e-mail de confirmação foi enviado para o seu e-mail");
+
+                        }
 
                     }
-                }
 
 
             }
@@ -195,7 +213,11 @@ public class CrachaActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onFailure(Call<RetornoMensagem> call, Throwable t) {
                 closeLoadingMessa();
-                dialogAlertErro( "Ops", "Ocorreu um erro ao processar requisição\n"+t.getMessage() );
+                if( !isOnline() ){
+                    dialogAlertErro( "Ops","Ocorreu um problema ao conectar\nPor favor verique sua conexão" );
+                }else{
+                    dialogAlertErro( "Ops","Não foi possível recuperar informação");
+                }
 
             }
         });
@@ -219,7 +241,8 @@ public class CrachaActivity extends AppCompatActivity implements View.OnClickLis
 
 
     private void dialogAlertErro( String titulo, String mensagem  ){
-        AlertDialog.Builder alert = new AlertDialog.Builder( CrachaActivity.this  );
+        //AlertDialog.Builder alert = new AlertDialog.Builder( CrachaActivity.this  );
+        AlertDialog.Builder alert = new AlertDialog.Builder( new ContextThemeWrapper(CrachaActivity.this , R.style.AlertDialogCustom )  );
         alert.setTitle( titulo );
         alert.setMessage( mensagem );
         alert.setNeutralButton(getString(R.string.lbl_ok), new DialogInterface.OnClickListener() {
@@ -234,7 +257,8 @@ public class CrachaActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void dialogAlert( String titulo, String mensagem  ){
-        AlertDialog.Builder alert = new AlertDialog.Builder( CrachaActivity.this  );
+     //   AlertDialog.Builder alert = new AlertDialog.Builder( CrachaActivity.this  );
+        AlertDialog.Builder alert = new AlertDialog.Builder( new ContextThemeWrapper(CrachaActivity.this , R.style.AlertDialogCustom )  );
         alert.setTitle( titulo );
         alert.setMessage( mensagem );
         alert.setNeutralButton(getString(R.string.lbl_ok), null);
@@ -271,5 +295,12 @@ public class CrachaActivity extends AppCompatActivity implements View.OnClickLis
 
     private void closeLoadingMessa(){
         progressDialog.dismiss();
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }
