@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import ham.org.br.nutricao.R;
 import ham.org.br.nutricao.activity.CardapioActivity;
 import ham.org.br.nutricao.model.Prato;
 import ham.org.br.nutricao.model.TipoPrato;
@@ -160,7 +161,8 @@ public class CardapioRetrofit extends AsyncTask<String, String, ExpandableListVi
 
     private void abrirMensagem(String titulo, String mensagem ){
 
-        AlertDialog.Builder alert = new AlertDialog.Builder( context );
+       // AlertDialog.Builder alert = new AlertDialog.Builder( context );
+        AlertDialog.Builder alert = new AlertDialog.Builder( context , R.style.AlertDialogCustom ) ;
         alert.setTitle(titulo);
         alert.setMessage( mensagem );
         alert.setNeutralButton("OK", null);

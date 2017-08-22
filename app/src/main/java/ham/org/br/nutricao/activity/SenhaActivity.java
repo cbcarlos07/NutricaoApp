@@ -122,7 +122,7 @@ public class SenhaActivity extends AppCompatActivity implements View.OnClickList
                             teste = false;
                             input_layout_pwd.setError( getString( R.string.senhaNot ) );
                             requestFocus( et_pwd );
-                            mensagemToast( "Senha não confere" );
+                            dialogAlert( "Atenção","Senha não confere" );
 
                         }
 
@@ -131,7 +131,7 @@ public class SenhaActivity extends AppCompatActivity implements View.OnClickList
 
                 @Override
                 public void onFailure(Call<RetornoMensagem> call, Throwable t) {
-                    mensagemToast( "Ocorreu um problema ao conectar: \n"+t.getMessage() );
+                    dialogAlert("Ops", "Ocorreu um problema" );
                 }
             });
 

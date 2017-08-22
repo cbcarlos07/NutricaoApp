@@ -549,12 +549,12 @@ public class CardapioActivity extends AppCompatActivity {
 
     private void dialogAlert( String titulo, String mensagem  ){
         //   AlertDialog.Builder alert = new AlertDialog.Builder( CrachaActivity.this  );
-        android.support.v7.app.AlertDialog.Builder alert = new android.support.v7.app.AlertDialog.Builder( new ContextThemeWrapper( CardapioActivity.this , R.style.AlertDialogCustom )  );
+        AlertDialog.Builder alert = new AlertDialog.Builder( new ContextThemeWrapper( CardapioActivity.this , R.style.AlertDialogCustom )  );
         alert.setTitle( titulo );
         alert.setMessage( mensagem );
         alert.setNeutralButton( getString(R.string.lbl_ok), null);
 
-        android.support.v7.app.AlertDialog aviso = alert.create();
+        AlertDialog aviso = alert.create();
         aviso.show();
     }
 
