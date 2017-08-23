@@ -131,7 +131,22 @@ public class CardapioActivity extends AppCompatActivity {
         btn_acao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                inserirOperacao( SenhaActivity.crachaBundle );
+                if( getAcao() == 'N'){
+                    finish();
+                }else{
+                    inserirOperacao( SenhaActivity.crachaBundle );
+                }
+
+            }
+        });
+
+        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView expandableListView, View view, int group, int item, long l) {
+                String valor = listIngredientes.get(  listaItem.get( listGrupo.get( group ) ).get( item )  );
+                // Log.i("Objeto", valor);
+                dialogAlert( "Ingredientes",valor );
+                return false;
             }
         });
 
@@ -226,7 +241,11 @@ public class CardapioActivity extends AppCompatActivity {
                             setAcao( 'C' );
                             break;
                         case "N":
-                            btn_acao.setVisibility( View.INVISIBLE );
+
+                            btn_acao.setText( getString( R.string.label_voltar ) );
+                            btn_acao.setVisibility( View.VISIBLE );
+                            btn_acao.setBackgroundColor(   getResources().getColor( R.color.colorIcone )  );
+                            //btn_acao = new Button( new ContextThemeWrapper( CardapioActivity.this, R.style.botaoPadrao ) );
                             acao =  'N' ;
                             setAcao( 'N' );
                             break;
@@ -305,7 +324,9 @@ public class CardapioActivity extends AppCompatActivity {
                             setAcao( 'C' );
                             break;
                         case "N":
-                            btn_acao.setVisibility( View.INVISIBLE );
+                            btn_acao.setText( getString( R.string.label_voltar ) );
+                            btn_acao.setVisibility( View.VISIBLE );
+                            btn_acao.setBackgroundColor(   getResources().getColor( R.color.colorPrimaryDark )  );
                             acao =  'N' ;
                             setAcao( 'N' );
                             break;
@@ -587,6 +608,8 @@ public class CardapioActivity extends AppCompatActivity {
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
+
+
 
 
 }
