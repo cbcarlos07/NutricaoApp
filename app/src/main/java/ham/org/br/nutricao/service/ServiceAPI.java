@@ -5,6 +5,7 @@ import java.util.List;
 import ham.org.br.nutricao.model.Agendamento;
 import ham.org.br.nutricao.model.CrachaValida;
 import ham.org.br.nutricao.model.Mensagem;
+import ham.org.br.nutricao.model.Message;
 import ham.org.br.nutricao.model.RetornoMensagem;
 import ham.org.br.nutricao.model.TipoPrato;
 import ham.org.br.nutricao.model.TipoRefeicao;
@@ -39,6 +40,12 @@ public interface ServiceAPI {
                                @Query("tipo_refeicao") int tipo,
                                @Query("data") String data,
                                @Query("cracha") String cracha);
+
+    @GET("nutricao/")
+    Call<Message> getMessage(@Query("acao") String acao,
+                              @Query("tipo_refeicao") int tipo,
+                              @Query("data") String data,
+                              @Query("cracha") String cracha);
 
     @GET("nutricao/")
     Call<List<Agendamento>> getAgendamento(@Query("acao") String acao,

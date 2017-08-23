@@ -83,7 +83,7 @@ public class TipoRefeicaoRetrofit extends AsyncTask<String, String, ArrayList<Ti
 
                     for ( TipoRefeicao tipoRefeicao : lstTipoRefeicao ){
                         listTipoRefeicao.add( tipoRefeicao );
-                        Log.i("TipoFor",tipoRefeicao.getDescricao());
+                       // Log.i("TipoFor",tipoRefeicao.getDescricao());
                     }
 
                     PesquisarFragment pesquisarFragment = new PesquisarFragment();

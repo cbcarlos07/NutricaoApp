@@ -71,7 +71,7 @@ public class AgendamentoRetrofit extends AsyncTask<String, String, String> {
         agdCall.enqueue( new Callback<List<Agendamento>>() {
             @Override
             public void onResponse(Call<List<Agendamento>> call, Response<List<Agendamento>> response) {
-                     Log.i("onResponse Agendamento",response.toString());
+                  //   Log.i("onResponse Agendamento",response.toString());
 
                 if( response.isSuccessful() ){
                     List<Agendamento> lstAgd = response.body();

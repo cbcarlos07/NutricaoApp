@@ -81,7 +81,7 @@ public class CardapioRetrofit extends AsyncTask<String, String, ExpandableListVi
 
                     for( TipoPrato tipoPrato : tipoPratos ){
 
-                        Log.i("Tipo", ""+tipoPrato.getCardapio());
+                        //Log.i("Tipo", ""+tipoPrato.getCardapio());
                         cardapio  = tipoPrato.getCardapio();
                         ArrayList<Prato> listaPratos = tipoPrato.getPratoList();
 

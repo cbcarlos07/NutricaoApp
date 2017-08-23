@@ -121,18 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
 
-        TabLayout.Tab tab = tabLayout.getTabAt( 0 );
-        int tabIconColor = ContextCompat.getColor(MainActivity.this, R.color.tabSelecionado );
-        tab.getIcon().setColorFilter( tabIconColor, PorterDuff.Mode.SRC_IN );
-
-        TabLayout.Tab tab1 = tabLayout.getTabAt( 1 );
-        int tabIconColor1 = ContextCompat.getColor(MainActivity.this, R.color.tabNaoSelecionado );
-        tab.getIcon().setColorFilter( tabIconColor, PorterDuff.Mode.SRC_IN );
-    }
 
     private void setupViewerPager(ViewPager viewPager ){
 

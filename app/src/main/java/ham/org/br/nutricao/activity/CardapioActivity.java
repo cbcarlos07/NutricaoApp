@@ -32,6 +32,7 @@ import ham.org.br.nutricao.R;
 
 import ham.org.br.nutricao.helper.Preferences;
 import ham.org.br.nutricao.model.Mensagem;
+import ham.org.br.nutricao.model.Message;
 import ham.org.br.nutricao.model.RetornoMensagem;
 import ham.org.br.nutricao.model.TipoPrato;
 import ham.org.br.nutricao.model.Prato;
@@ -68,6 +69,12 @@ public class CardapioActivity extends AppCompatActivity {
     private String data;
     public static Activity cardapioActivity;
     public static boolean cardapioAtivo =  false;
+
+    private ArrayList<String> listGrupo;
+    private HashMap<String, String> listIngredientes;
+    private HashMap<String, List<String>> listaItem;
+    private ExpandableListAdapter listAdapter;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +117,7 @@ public class CardapioActivity extends AppCompatActivity {
 
 
         getMensagem( );
-        chamarTipoPratos(idTipoRef, data );
+      //  chamarTipoPratos(idTipoRef, data );
 
 
 
@@ -144,16 +151,54 @@ public class CardapioActivity extends AppCompatActivity {
     }
 
     private void getMensagem (  ){
-        Call<Mensagem> mensagemCall = serviceAPI.getMensagem( "M", idTipoRef, data, SenhaActivity.crachaBundle );
-        mensagemCall.enqueue(new Callback<Mensagem>() {
+        dialog = new ProgressDialog( CardapioActivity.this );
+        dialog.setMessage( "Buscando agendamentos" );
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+        listGrupo = new ArrayList<String>();
+        listaItem = new HashMap<String, List<String>>();
+        listIngredientes = new HashMap<String, String>();
+        Call<Message> mensagemCall = serviceAPI.getMessage( "M", idTipoRef, data, SenhaActivity.crachaBundle );
+        mensagemCall.enqueue(new Callback<Message>() {
             @Override
-            public void onResponse(Call<Mensagem> call, Response<Mensagem> response) {
+            public void onResponse(Call<Message> call, Response<Message> response) {
               //  Log.i("Mensagens body",response.toString());
                 if( response.isSuccessful() ){
-
-                    Mensagem mensagem = response.body();
+                    int i = 0;
+                    Message mensagem = response.body();
                    // mensagem = new Mensagem();
                     setCdCardapio( mensagem.getCardapio() );
+
+
+                    if( mensagem.getCardapio() > 0 ){
+
+                        List<TipoPrato> tipoPratoList = mensagem.getTipoPrato();
+
+                        for (TipoPrato tipoPrato : tipoPratoList){
+                            ArrayList<Prato> pratoArrayList = tipoPrato.getPratoList();
+                            Log.i("Tipo prato: ", tipoPrato.getTipoprato());
+                            listGrupo.add( tipoPrato.getTipoprato() );
+                            ArrayList<String> pratos = new ArrayList<String>();
+                            ArrayList<String> ingredientes = new ArrayList<String>();
+
+                            for( Prato prato : pratoArrayList ){
+
+                                pratos.add( prato.getPrato() );
+                                ingredientes.add( prato.getIngrediente() );
+                                listIngredientes.put( prato.getPrato(), prato.getIngrediente() );
+                            }
+
+                            listaItem.put( listGrupo.get( i ), pratos );
+
+                            i++;
+
+                        }
+
+
+                    }
+
 
 
 
@@ -161,8 +206,6 @@ public class CardapioActivity extends AppCompatActivity {
 
                         dialogAlert( "Atenção!", mensagem.getMotivo() );
 
-                    }else{
-                        btn_acao.setText( "Agendar" );
                     }
 
                //     Log.i("Mensagem Acao", mensagem.getAcao());
@@ -194,11 +237,21 @@ public class CardapioActivity extends AppCompatActivity {
                     }
 
                 }
+                listAdapter = new ExpandableListAdapter( CardapioActivity.this, listGrupo, listaItem );
 
+                expListView.setAdapter( listAdapter );
+
+
+                /** deixando grupos expandidos por padrão**/
+                for ( int i = 0; i < listAdapter.getGroupCount(); i++ ){
+
+                    expListView.expandGroup( i );
+                }
+                dialog.dismiss();
             }
 
             @Override
-            public void onFailure(Call<Mensagem> call, Throwable t) {
+            public void onFailure(Call<Message> call, Throwable t) {
                 //Log.i("onFailure Mensagem", t.getMessage());
                 if( !isOnline() ){
                     dialogAlert( "Ops","Ocorreu um problema ao conectar\nPor favor verique sua conexão" );
@@ -230,10 +283,8 @@ public class CardapioActivity extends AppCompatActivity {
 
                     if( !mensagem.getMotivo().equals("") ){
 
-                       // abrirMensagem( "Atenção!", mensagem.getMotivo() );
+                        dialogAlert( "Atenção!", mensagem.getMotivo() );
 
-                    }else{
-                        btn_acao.setText( "Agendar" );
                     }
 
                    // Log.i("Mensagem Acao", mensagem.getAcao());
@@ -329,16 +380,6 @@ public class CardapioActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void abrirMensagem( String titulo, String mensagem ){
-
-        AlertDialog.Builder alert = new AlertDialog.Builder( this );
-        alert.setTitle(titulo);
-        alert.setMessage( mensagem );
-        alert.setNeutralButton("OK", null);
-        AlertDialog dialog = alert.create();
-        dialog.show();
-
-    }
 
 
 
@@ -465,24 +506,6 @@ public class CardapioActivity extends AppCompatActivity {
 
 
 
-
-    private void refresh(  ){
-        Intent intent = getIntent();
-        finish();
-        startActivity( intent );
-    }
-
-    private void dialogMensagem(String titulo, String mensagem){
-        AlertDialog.Builder alerta = new AlertDialog.Builder( CardapioActivity.this );
-        alerta.setTitle( titulo );
-        alerta.setMessage( mensagem );
-        //t.printStackTrace();
-        alerta.setNeutralButton( "OK", null );
-        AlertDialog dialog = alerta.create();
-        //     Log.i("Retorno", t.toString());
-
-        dialog.show();
-    }
 
 
     @Override
