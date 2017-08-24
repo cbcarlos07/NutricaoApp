@@ -272,6 +272,7 @@ public class CardapioActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Message> call, Throwable t) {
                 //Log.i("onFailure Mensagem", t.getMessage());
+                dialog.dismiss();
                 if( !isOnline() ){
                     dialogAlert( "Ops","Ocorreu um problema ao conectar\nPor favor verique sua conexão" );
                 }else{
