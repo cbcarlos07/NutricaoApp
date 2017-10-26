@@ -101,7 +101,7 @@ public class AgendamentoRetrofit extends AsyncTask<String, String, String> {
 
                     dialogAlert( "Ops","Ocorreu um problema ao conectar\nPor favor verique sua conexão" );
                 }else{
-                    dialogAlert( "Ops","Ocorreu um problema ao buscar os dados" );
+                    dialogAlert( "Ops","Ocorreu um problema ao buscar os dados\n"+t.getMessage() );
                 }
 
               //  Toast.makeText( context, "Ocorreu um problema ao buscar os dados\n"+t.getMessage(), Toast.LENGTH_LONG ).show();

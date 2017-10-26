@@ -110,7 +110,7 @@ public class TipoRefeicaoRetrofit extends AsyncTask<String, String, ArrayList<Ti
 
                 }else{
                     //Toast.makeText( context, "Ocorreu um problema ao buscar os dados\n"+t.getMessage(), Toast.LENGTH_LONG ).show();
-                    mensagemDialog("Ops","Ocorreu um problema ao buscar os dados" );
+                    mensagemDialog("Ops","Ocorreu um problema ao buscar os dados\n"+t.getMessage() );
                 }
 
 
