@@ -22,32 +22,32 @@ import retrofit2.http.Query;
  */
 
 public interface ServiceAPI {
-     String BASE_URL = "http://boleto.ham.org.br:8080/webservice/";
-   //static String BASE_URL = "http://10.50.140.54/webservice/";
+   //  String BASE_URL = "http://boleto.ham.org.br:8080/webservice/";
+   static String BASE_URL = "http://10.50.140.54/webservice/";
 
-    @GET("nutricao/")
+    @POST("nutricao/")
     Call<List<TipoPrato>> getlistTipoPratos(
          @Query("acao") String acao,
          @Query("tipo_refeicao") int tipo,
          @Query("data") String data);
 
-    @GET("nutricao/")
+    @POST("nutricao/")
     Call<List<TipoRefeicao>> getlistTipoRefeicao(@Query("acao") String acao);
 
 
-    @GET("nutricao/")
+    @POST("nutricao/")
     Call<Mensagem> getMensagem(@Query("acao") String acao,
                                @Query("tipo_refeicao") int tipo,
                                @Query("data") String data,
                                @Query("cracha") String cracha);
 
-    @GET("nutricao/")
-    Call<Message> getMessage(@Query("acao") String acao,
+    @POST("nutricao/")
+    Call<Message> getMessage( @Query("acao") String acao,
                               @Query("tipo_refeicao") int tipo,
                               @Query("data") String data,
                               @Query("cracha") String cracha);
 
-    @GET("nutricao/")
+    @POST("nutricao/")
     Call<List<Agendamento>> getAgendamento(@Query("acao") String acao,
                                            @Query("cracha") String cracha);
 
@@ -64,13 +64,13 @@ public interface ServiceAPI {
             .build();
 
 
-    @GET("nutricao/")
+    @POST("nutricao/")
     Call<CrachaValida> getRetornoCracha(@Query("acao") String acao, @Query("cracha") String cracha);
 
-    @GET("nutricao/")
+    @POST("nutricao/")
     Call<RetornoMensagem> getInserirUser(@Query("acao") String acao, @Query("cracha") String cracha);
 
-    @GET("nutricao/")
+    @POST("nutricao/")
     Call<RetornoMensagem> logarSistema(@Header("Authorization") String autHeader);
 
     @POST("nutricao/")

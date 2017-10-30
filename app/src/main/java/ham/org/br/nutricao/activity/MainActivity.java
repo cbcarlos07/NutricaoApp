@@ -3,6 +3,8 @@ package ham.org.br.nutricao.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.TabLayout;
@@ -11,13 +13,18 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import java.io.Console;
+
 import ham.org.br.nutricao.R;
 import ham.org.br.nutricao.adapter.TabAdapter;
 import ham.org.br.nutricao.adapter.ViewPagerAdapter;
+import ham.org.br.nutricao.database.Database;
+import ham.org.br.nutricao.dominio.RepositorioTipoRefeicao;
 import ham.org.br.nutricao.fragment.AgendamentosFragment;
 import ham.org.br.nutricao.fragment.PesquisarFragment;
 import ham.org.br.nutricao.helper.Preferences;
@@ -36,10 +43,28 @@ public class MainActivity extends AppCompatActivity {
              R.drawable.ic_date_range
            };
     private int tamanhoIcone;
+    private Database database;
+    private SQLiteDatabase conn;
+    private RepositorioTipoRefeicao repositorioTipoRefeicao;
 
 @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        try {
+            database = new Database(this);
+            conn = database.getReadableDatabase();
+            repositorioTipoRefeicao = new RepositorioTipoRefeicao( conn );
+
+            Log.d("Tipo Refeicao: ", ""+repositorioTipoRefeicao.getTipoRefeicaoCount());
+
+
+        }catch (SQLiteException e){
+            e.getMessage();
+        }
+
+
+
         setContentView(R.layout.activity_main);
 
         toolbar = (Toolbar) findViewById( R.id.toolbar );

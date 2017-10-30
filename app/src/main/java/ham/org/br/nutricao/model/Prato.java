@@ -9,10 +9,36 @@ import com.google.gson.annotations.SerializedName;
 
 public class Prato {
 
-    @SerializedName("prato")
 
+    private int id;
     private String prato;
     private String ingrediente;
+    private int tipoprato;
+    private int cardapio;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getTipoprato() {
+        return tipoprato;
+    }
+
+    public void setTipoprato(int tipoprato) {
+        this.tipoprato = tipoprato;
+    }
+
+    public int getCardapio() {
+        return cardapio;
+    }
+
+    public void setCardapio(int cardapio) {
+        this.cardapio = cardapio;
+    }
 
     public String getIngrediente() {
         return ingrediente;

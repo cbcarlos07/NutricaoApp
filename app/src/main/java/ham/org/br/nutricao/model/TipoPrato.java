@@ -18,10 +18,21 @@ public class TipoPrato {
         @SerializedName("cd_cardapio")
         private int cardapio;
 
+        @SerializedName("cd_tipo_prato")
+        private int cdtipoprato;
+
 
         @SerializedName("pratos")
 
         private ArrayList<Prato> pratoList = new ArrayList<>();
+
+    public int getCdtipoprato() {
+        return cdtipoprato;
+    }
+
+    public void setCdtipoprato(int cdtipoprato) {
+        this.cdtipoprato = cdtipoprato;
+    }
 
     public int getCardapio() {
         return cardapio;

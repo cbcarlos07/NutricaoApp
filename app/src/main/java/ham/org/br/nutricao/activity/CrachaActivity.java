@@ -131,6 +131,7 @@ public class CrachaActivity extends AppCompatActivity implements View.OnClickLis
                         dialogAlertErro( "Ops","Ocorreu um problema ao conectar" );
                     }else{
                         dialogAlertErro( "Ops","Não foi possível recuperar informação");
+                        Log.d("Erro", t.getMessage());
                     }
                    /* if( t.hashCode() == 156572836 ){
                         dialogAlertErro( "Ops","Ocorreu um problema ao conectar" );
@@ -214,9 +215,10 @@ public class CrachaActivity extends AppCompatActivity implements View.OnClickLis
             public void onFailure(Call<RetornoMensagem> call, Throwable t) {
                 closeLoadingMessa();
                 if( !isOnline() ){
-                    dialogAlertErro( "Ops","Ocorreu um problema ao conectar\nPor favor verique sua conexão" );
+                    dialogAlertErro( "Ops","Ocorreu um problema ao conectar\nPor favor verifique sua conexão" );
                 }else{
                     dialogAlertErro( "Ops","Não foi possível recuperar informação");
+                    Log.d("Erro:", t.getMessage());
                 }
 
             }
