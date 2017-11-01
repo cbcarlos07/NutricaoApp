@@ -21,6 +21,7 @@ public class ScriptSQL {
     public static final String CARDAPIO_TABLE             = "cardapio";
     public static final String CARDAPIO_ID                = "id";
     public static final String CARDAPIO_DATA              = "data";
+    public static final String CARDAPIO_TIPO              = "tipo";
     public static final String TIPO_PRATO_TABLE           = "tipo_prato";
     public static final String TIPO_PRATO_ID              = "tipo_prato";
     public static final String TIPO_PRATO_DSTIPO          = "dstipo";
@@ -60,7 +61,8 @@ public class ScriptSQL {
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("CREATE TABLE IF NOT EXISTS "+CARDAPIO_TABLE+"( ");
         sqlBuilder.append(CARDAPIO_ID+" INTEGER, " );
-        sqlBuilder.append(CARDAPIO_DATA+" VARCHAR(255) ");
+        sqlBuilder.append(CARDAPIO_DATA+" VARCHAR(255), ");
+        sqlBuilder.append(CARDAPIO_TIPO+" INTEGER ");
         sqlBuilder.append(" ) ;");
         return sqlBuilder.toString();
     }

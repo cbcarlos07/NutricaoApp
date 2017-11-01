@@ -158,12 +158,13 @@ public class AgendamentosFragment extends Fragment implements SwipeRefreshLayout
 
     private void  abrirNovaTela( int i ){
 
-        Log.d( "LodAFAbrirNovaTela", "Abir nova tela" );
+        Log.d( "LodAFAbrirNovaTela", "Abrir nova tela" );
 
         Agendamento agendamento = agendamentoList.get( i );
 
         Intent intent = new Intent( getActivity(), CardapioActivity.class );
         Log.d("LodAF Codigo Tipo", ""+agendamento.getCdTipo());
+
         intent.putExtra( "tipo", agendamento.getCdTipo() );
         intent.putExtra( "data", agendamento.getData() );
         intent.putExtra( "strTipo", agendamento.getTipo() );

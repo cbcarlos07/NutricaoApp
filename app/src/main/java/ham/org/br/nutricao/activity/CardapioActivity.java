@@ -36,8 +36,12 @@ import java.util.List;
 import ham.org.br.nutricao.R;
 
 import ham.org.br.nutricao.database.Database;
+import ham.org.br.nutricao.dominio.RepositorioCardapio;
+import ham.org.br.nutricao.dominio.RepositorioPrato;
+import ham.org.br.nutricao.dominio.RepositorioTipoPrato;
 import ham.org.br.nutricao.dominio.RepositorioTipoRefeicao;
 import ham.org.br.nutricao.helper.Preferences;
+import ham.org.br.nutricao.model.Cardapio;
 import ham.org.br.nutricao.model.Mensagem;
 import ham.org.br.nutricao.model.Message;
 import ham.org.br.nutricao.model.RetornoMensagem;
@@ -67,7 +71,7 @@ public class CardapioActivity extends AppCompatActivity {
 
     private Button btn_acao;
     public static char acao;
-    private int cdCardapio;
+
 
 
     private  ServiceAPI serviceAPI;
@@ -75,6 +79,7 @@ public class CardapioActivity extends AppCompatActivity {
     private String data;
     public static Activity cardapioActivity;
     public static boolean cardapioAtivo =  false;
+    private int cdCardapio;
 
     private ArrayList<String> listGrupo;
     private HashMap<String, String> listIngredientes;
@@ -85,6 +90,9 @@ public class CardapioActivity extends AppCompatActivity {
     private Database database;
     private SQLiteDatabase conn;
     private RepositorioTipoRefeicao repositorioTipoRefeicao;
+    private RepositorioTipoPrato repositorioTipoPrato;
+    private RepositorioPrato repositorioPrato;
+    private RepositorioCardapio repositorioCardapio;
 
 
     @Override
@@ -117,6 +125,7 @@ public class CardapioActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
       //  Log.d("LodCABundle", ""+bundle);
+
         idTipoRef = bundle.getInt( "tipo" );
      //   Log.d("LodCodigoRef", ""+idTipoRef );
         data   = bundle.getString( "data" );
@@ -126,10 +135,11 @@ public class CardapioActivity extends AppCompatActivity {
         getHoras();
 
 
-         serviceAPI = ServiceAPI.retrofit.create(ServiceAPI.class);
+        serviceAPI = ServiceAPI.retrofit.create(ServiceAPI.class);
+
+         codCardapio();
 
 
-        getMensagem( );
       //  chamarTipoPratos(idTipoRef, data );
 
 
@@ -166,6 +176,24 @@ public class CardapioActivity extends AppCompatActivity {
 
     }
 
+    private void codCardapio(){
+        database = new Database( this );
+        conn = database.getReadableDatabase();
+        repositorioCardapio = new RepositorioCardapio( conn );
+        repositorioCardapio.listarCardapios();
+        conn = database.getReadableDatabase();
+        repositorioCardapio = new RepositorioCardapio( conn );
+        int varCdCardapio = repositorioCardapio.getCdCardapio( data, idTipoRef );
+        Log.d("LodCACdCardapio", "Codigo do Cardapio: "+varCdCardapio);
+        if( varCdCardapio > 0 ){
+            setCdCardapio( varCdCardapio );
+            preencherCardapioSQlite(  );
+        }else{
+            getMensagem( );
+        }
+
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -178,9 +206,102 @@ public class CardapioActivity extends AppCompatActivity {
         cardapioAtivo = false;
     }
 
+    private void preencherCardapioSQlite(  ){
+        Log.d("LodCAPreenCS","Preencher cardapio SQlite");
+        database = new Database( this );
+        conn = database.getReadableDatabase();
+        repositorioPrato = new RepositorioPrato( conn );
+        repositorioPrato.getListPratos( getCdCardapio() );
+        conn = database.getReadableDatabase();
+        repositorioCardapio = new RepositorioCardapio( conn );
+        String data = repositorioCardapio.getDataCardapio( getCdCardapio() );
+        Log.d("LodCADataCard", data);
+
+        if( data.equals("") ){
+
+                getMensagem();
+
+        }
+        else{
+            listGrupo = new ArrayList<String>();
+            listaItem = new HashMap<String, List<String>>();
+            listIngredientes = new HashMap<String, String>();
+
+
+
+            conn = database.getReadableDatabase();
+            repositorioTipoPrato = new RepositorioTipoPrato( conn );
+            repositorioPrato = new RepositorioPrato( conn );
+            Log.d("231.LodCACdCar", ""+this.getCdCardapio());
+            List<Prato> listTipoPratos = repositorioPrato.getTiposPratos( getCdCardapio()  );
+            int loop =  0;
+
+            ArrayList<String> pratos = new ArrayList<String>();
+            ArrayList<String> ingredientes = new ArrayList<String>();
+            int cdTipoPrato = 0;
+            for( Prato prato : listTipoPratos ){
+
+
+                conn = database.getReadableDatabase();
+                repositorioTipoPrato = new RepositorioTipoPrato( conn );
+
+                cdTipoPrato = prato.getTipoprato();
+
+                String strTipoPrato = repositorioTipoPrato.getTipoPrato( cdTipoPrato );
+                Log.d("LodCATipoPrato", strTipoPrato);
+                listGrupo.add( strTipoPrato );
+
+                conn = database.getReadableDatabase();
+                repositorioPrato = new RepositorioPrato( conn );
+                List<Prato> dishList = repositorioPrato.getPratos( cdCardapio, cdTipoPrato );
+                for( Prato dish :  dishList ){
+
+                    pratos.add( dish.getPrato() );
+                    ingredientes.add( dish.getIngrediente() );
+                    listIngredientes.put( dish.getPrato(), dish.getIngrediente() );
+
+                }
+
+                listaItem.put( listGrupo.get( loop ), pratos );
+
+                loop++;
+
+            }
+
+            listAdapter = new ExpandableListAdapter( CardapioActivity.this, listGrupo, listaItem );
+
+            expListView.setAdapter( listAdapter );
+
+
+            /** deixando grupos expandidos por padrão**/
+            for ( int i = 0; i < listAdapter.getGroupCount(); i++ ){
+
+                expListView.expandGroup( i );
+            }
+
+            if( getHoras() > 0 ){
+                btn_acao.setText( getString( R.string.btn_cancelar ) );
+                btn_acao.setVisibility( View.VISIBLE );
+                btn_acao.setBackgroundColor(   getResources().getColor( R.color.colorNormalCancelar )  );
+                acao =  'C' ;
+                setAcao( 'C' );
+            }else{
+                btn_acao.setText( getString( R.string.label_voltar ) );
+                btn_acao.setVisibility( View.VISIBLE );
+                btn_acao.setBackgroundColor(   getResources().getColor( R.color.colorPrimaryDark )  );
+                acao =  'N' ;
+                setAcao( 'N' );
+            }
+        }
+
+
+
+
+    }
+
     private void getMensagem (  ){
         dialog = new ProgressDialog( CardapioActivity.this );
-        dialog.setMessage( "Buscando agendamentos" );
+        dialog.setMessage( "Buscando Cardapios" );
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
@@ -204,10 +325,42 @@ public class CardapioActivity extends AppCompatActivity {
 
                         List<TipoPrato> tipoPratoList = mensagem.getTipoPrato();
 
+                        database =  new Database( getApplicationContext() );
+                        conn = database.getWritableDatabase();
+                        repositorioCardapio = new RepositorioCardapio( conn );
+                        Cardapio cardapio = new Cardapio();
+                        Log.d("LodCAdCdCardResp", ""+mensagem.getCardapio());
+                        cardapio.setCodigo( mensagem.getCardapio() );
+                        Log.d("LodCADataResp", data);
+                        cardapio.setData( data );
+                        cardapio.setTipo( idTipoRef );
+                        long teste = repositorioCardapio.addCardapio( cardapio );
+                        if( teste > 0 ){
+                            Log.d("LodInsertCard: ", "Inserido com sucesso: "+teste);
+                        }
+
                         for (TipoPrato tipoPrato : tipoPratoList){
                             ArrayList<Prato> pratoArrayList = tipoPrato.getPratoList();
                             Log.i("Tipo prato: ", tipoPrato.getTipoprato());
                             listGrupo.add( tipoPrato.getTipoprato() );
+
+                            database = new Database( getApplicationContext() );
+                            conn = database.getReadableDatabase();
+                            repositorioTipoPrato = new RepositorioTipoPrato( conn );
+                            String strTipoPrato = repositorioTipoPrato.getTipoPrato( tipoPrato.getCdtipoprato() );
+                            if( strTipoPrato.equals("") ){
+                                conn = database.getWritableDatabase();
+                                repositorioTipoPrato = new RepositorioTipoPrato( conn );
+
+                                long retornoCard = repositorioTipoPrato.addTipoPrato( tipoPrato );
+                                if( retornoCard > 0 ){
+                                    Log.d("LodInsertPrato", "Inserido com sucesso: "+retornoCard);
+                                }
+
+                            }
+
+
+
                             ArrayList<String> pratos = new ArrayList<String>();
                             ArrayList<String> ingredientes = new ArrayList<String>();
 
@@ -216,6 +369,21 @@ public class CardapioActivity extends AppCompatActivity {
                                 pratos.add( prato.getPrato() );
                                 ingredientes.add( prato.getIngrediente() );
                                 listIngredientes.put( prato.getPrato(), prato.getIngrediente() );
+
+                                database = new Database( getApplicationContext() );
+                                conn = database.getWritableDatabase();
+                                repositorioPrato = new RepositorioPrato( conn );
+                                Prato dish = new Prato();
+                                dish.setCardapio( tipoPrato.getCardapio() );
+                                dish.setTipoprato( tipoPrato.getCdtipoprato() );
+                                dish.setPrato( prato.getPrato() );
+                                dish.setIngrediente( prato.getIngrediente() );
+                                long retornoPrato = repositorioPrato.addPrato( dish );
+                                if( retornoPrato > 0 ){
+                                    Log.d("LodInsertPrato", "Inserido com sucesso");
+                                }
+
+
                             }
 
                             listaItem.put( listGrupo.get( i ), pratos );

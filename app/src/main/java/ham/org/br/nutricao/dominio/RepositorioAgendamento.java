@@ -45,6 +45,7 @@ public class RepositorioAgendamento {
     public ArrayList<Agendamento> getAllAgendamento(){
         ArrayList<Agendamento> agendamentoList = new ArrayList<Agendamento>();
         String cracha = SenhaActivity.crachaBundle;
+        Log.d("LodRepAgd","Cracha: "+cracha);
         Cursor cursor = conn.rawQuery(
                                 "SELECT * FROM "+
                                 ScriptSQL.AGENDAMENTO_TABLE+"  WHERE "+

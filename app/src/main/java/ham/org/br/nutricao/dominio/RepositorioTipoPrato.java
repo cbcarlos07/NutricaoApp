@@ -19,14 +19,15 @@ public class RepositorioTipoPrato {
         this.conn = conexao;
     }
 
-    public void addTipoPrato (TipoPrato obj ){
+    public long addTipoPrato (TipoPrato obj ){
 
         ContentValues values = new ContentValues();
         values.put( ScriptSQL.TIPO_PRATO_ID, obj.getCdtipoprato() );
         values.put( ScriptSQL.TIPO_PRATO_DSTIPO, obj.getTipoprato() );
 
-        conn.insert( ScriptSQL.TIPO_PRATO_TABLE, null, values );
+        long teste = conn.insert( ScriptSQL.TIPO_PRATO_TABLE, null, values );
         conn.close();
+        return teste;
     }
 
     public void excluirTudo(){
@@ -39,8 +40,9 @@ public class RepositorioTipoPrato {
         Cursor cursor = conn.query( ScriptSQL.TIPO_PRATO_TABLE, null, ScriptSQL.TIPO_PRATO_ID+" = ?", new String[]{ String.valueOf( id ) }, null, null, null );
         String tipoPrato = "";
         int coluna = cursor.getColumnIndex( ScriptSQL.TIPO_PRATO_DSTIPO );
-        if( cursor != null ){
-            cursor.moveToFirst();
+        cursor.moveToFirst();
+        if( cursor.moveToNext() ){
+
             tipoPrato = cursor.getString( coluna );
         }
         cursor.close();

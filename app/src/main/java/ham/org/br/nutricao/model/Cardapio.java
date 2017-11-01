@@ -8,6 +8,15 @@ public class Cardapio {
 
     private int codigo;
     private String data;
+    private int tipo;
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
+    }
 
     public int getCodigo() {
         return codigo;
