@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.StrictMode;
@@ -24,12 +25,18 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import ham.org.br.nutricao.R;
 
+import ham.org.br.nutricao.database.Database;
+import ham.org.br.nutricao.dominio.RepositorioTipoRefeicao;
 import ham.org.br.nutricao.helper.Preferences;
 import ham.org.br.nutricao.model.Mensagem;
 import ham.org.br.nutricao.model.Message;
@@ -40,7 +47,6 @@ import ham.org.br.nutricao.model.TipoRefeicao;
 import ham.org.br.nutricao.service.CardapioRetrofit;
 import ham.org.br.nutricao.service.ExpandableListAdapter;
 import ham.org.br.nutricao.service.Permissao;
-import ham.org.br.nutricao.service.SalvarOperacao;
 import ham.org.br.nutricao.service.ServiceAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -76,9 +82,15 @@ public class CardapioActivity extends AppCompatActivity {
     private ExpandableListAdapter listAdapter;
     private ProgressDialog dialog;
 
+    private Database database;
+    private SQLiteDatabase conn;
+    private RepositorioTipoRefeicao repositorioTipoRefeicao;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.cardapio_activity);
         cardapioActivity = this;
         Permissao.validaPermissoes(1, this, permissoesNecessarias );
@@ -104,13 +116,14 @@ public class CardapioActivity extends AppCompatActivity {
 
 
         Bundle bundle = getIntent().getExtras();
-
+      //  Log.d("LodCABundle", ""+bundle);
         idTipoRef = bundle.getInt( "tipo" );
+     //   Log.d("LodCodigoRef", ""+idTipoRef );
         data   = bundle.getString( "data" );
         String strTipo   = bundle.getString( "strTipo" );
         //toolbar.setTitle( "Cardápio - "+data+" - "+strTipo );
         setTitle( strTipo+" - "+data );
-
+        getHoras();
 
 
          serviceAPI = ServiceAPI.retrofit.create(ServiceAPI.class);
@@ -610,6 +623,41 @@ public class CardapioActivity extends AppCompatActivity {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
+    private double getHoras(){
+
+        database = new Database( this );
+        conn = database.getReadableDatabase();
+        repositorioTipoRefeicao = new RepositorioTipoRefeicao( conn );
+        Log.d("LodCACdTipoRef", ""+idTipoRef );
+        TipoRefeicao tipoRefeicao = repositorioTipoRefeicao.getPrazos( idTipoRef );
+
+
+        DateFormat df = new SimpleDateFormat ("dd/MM/yyyy HH:mm:ss");
+        df.setLenient(false);
+        Date d1 = null;
+        Date d2 = new Date();
+        try {
+            d1 = df.parse (data+" "+tipoRefeicao.getHrInicio()+":00");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        System.out.println (d2);
+        double dia1 = ( d1.getTime() / 86400000 ); //86400000 representa 1 dia
+        double dia2 = ( d2.getTime() / 86400000 ); //86400000 representa 1 dia
+
+        Log.d ("LodDataInicial",""+dia1);
+        Log.d ("LodDataFinal",""+dia2);
+        double dt =  dia1 - ( tipoRefeicao.getCancelamento() / 24 ) -  dia2  ; //
+        //float dt = ( d1.getTime() - (( 12 / 24 ) * 3600000 ) ) -  d2.getTime()  ; // 1 hora para compensar horário de verão
+       // float dt = (d2.getTime() - d1.getTime()) + 3600000; // 1 hora para compensar horário de verão
+       // System.out.println (dt / 86400000L); // passaram-se 67111 dias
+       // float passaram = dt / 86400000L;
+        Log.d("LodHoraFinal", ""+dt );
+        return dt;
+
+    }
 
 
 

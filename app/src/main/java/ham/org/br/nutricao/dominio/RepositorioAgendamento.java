@@ -5,10 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import ham.org.br.nutricao.activity.SenhaActivity;
 import ham.org.br.nutricao.database.Database;
 import ham.org.br.nutricao.database.ScriptSQL;
 import ham.org.br.nutricao.model.Agendamento;
@@ -24,31 +26,46 @@ public class RepositorioAgendamento {
         this.conn = conexao;
     }
 
-    public void addAgendamento (Agendamento obj ){
+    public long addAgendamento (Agendamento obj ){
+       // Log.d("addinsert","Para inserir");
 
         ContentValues values = new ContentValues();
         values.put( ScriptSQL.AGENDAMENTO_CARDAPIO, obj.getCardapio() );
         values.put( ScriptSQL.AGENDAMENTO_CDTIPO, obj.getCdTipo() );
         values.put( ScriptSQL.AGENDAMENTO_TIPO, obj.getTipo() );
         values.put( ScriptSQL.AGENDAMENTO_DATA, obj.getData() );
+        values.put( ScriptSQL.AGENDAMENTO_CRACHA, SenhaActivity.crachaBundle);
 
-        conn.insertOrThrow( ScriptSQL.AGENDAMENTO_TABLE, null, values );
+        long teste = conn.insertOrThrow( ScriptSQL.AGENDAMENTO_TABLE, null, values );
+        Log.d("insert","Inserido com sucesso res: "+teste);
         conn.close();
+        return teste;
     }
 
-    public List<Agendamento> getAllAgendamento(Context context){
-        List<Agendamento> agendamentoList = new ArrayList<Agendamento>();
-        Cursor cursor = conn.query(ScriptSQL.AGENDAMENTO_TABLE, null, null, null,null, null, null);
-
+    public ArrayList<Agendamento> getAllAgendamento(){
+        ArrayList<Agendamento> agendamentoList = new ArrayList<Agendamento>();
+        String cracha = SenhaActivity.crachaBundle;
+        Cursor cursor = conn.rawQuery(
+                                "SELECT * FROM "+
+                                ScriptSQL.AGENDAMENTO_TABLE+"  WHERE "+
+                                ScriptSQL.AGENDAMENTO_CRACHA+" = ? AND "+ScriptSQL.AGENDAMENTO_DATA+" >= strftime('%d/%m/%Y', 'now')",
+                                new String[]{ cracha  } );
+        int colCardapio = cursor.getColumnIndex( ScriptSQL.AGENDAMENTO_CARDAPIO );
+        int colTipo = cursor.getColumnIndex( ScriptSQL.AGENDAMENTO_TIPO );
+        int colCdTipo = cursor.getColumnIndex( ScriptSQL.AGENDAMENTO_CDTIPO );
+        int colData = cursor.getColumnIndex( ScriptSQL.AGENDAMENTO_DATA );
+        //int colDate = cursor.getColumnIndex( "agora" );
         if( cursor.getCount() > 0 ){
             cursor.moveToFirst();
             do{
                 Agendamento agendamento = new Agendamento();
-                agendamento.setCardapio( cursor.getInt( 2 ) );
-                agendamento.setCardapio( cursor.getInt( 2 ) );
-                agendamento.setTipo( cursor.getString( 3 ) );
-                agendamento.setCdTipo( cursor.getInt( 4 ) );
-                agendamento.setData( cursor.getString( 5 ) );
+                agendamento.setCardapio( cursor.getInt( colCardapio ) );
+                agendamento.setTipo( cursor.getString( colTipo ) );
+             //   Log.d("LodRAgdCdTipoSQlite",""+cursor.getInt( colCdTipo ));
+                Log.d("LodRAgdDataSQlite",""+cursor.getString( colData ));
+          //      Log.d("LodRAgdAgoraSQlite",""+cursor.getString( colDate ));
+                agendamento.setCdTipo( cursor.getInt( colCdTipo ) );
+                agendamento.setData( cursor.getString( colData ) );
                 agendamentoList.add( agendamento );
             }while ( cursor.moveToNext() );
 
@@ -66,7 +83,8 @@ public class RepositorioAgendamento {
     public int getAgendamentoCount(  ){
         String sql = "SELECT * FROM "+ScriptSQL.AGENDAMENTO_TABLE;
         Cursor cursor = conn.rawQuery( sql, null );
+        int total = cursor.getCount();
         cursor.close();
-        return cursor.getCount();
+        return total;
     }
 }

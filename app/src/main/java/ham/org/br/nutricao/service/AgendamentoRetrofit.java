@@ -3,6 +3,7 @@ package ham.org.br.nutricao.service;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -23,6 +24,8 @@ import java.util.List;
 import ham.org.br.nutricao.R;
 import ham.org.br.nutricao.activity.CardapioActivity;
 import ham.org.br.nutricao.adapter.AgendaAdapter;
+import ham.org.br.nutricao.database.Database;
+import ham.org.br.nutricao.dominio.RepositorioAgendamento;
 import ham.org.br.nutricao.model.Agendamento;
 import ham.org.br.nutricao.model.Prato;
 import ham.org.br.nutricao.model.TipoPrato;
@@ -42,10 +45,14 @@ public class AgendamentoRetrofit extends AsyncTask<String, String, String> {
     private ProgressDialog dialog;
     private ArrayList<Agendamento> listaAgendamento;
     private ArrayAdapter<Agendamento> arrayAdapter;
+    private Database database;
+    private SQLiteDatabase conn;
+    private RepositorioAgendamento repositorioAgendamento;
 
     public AgendamentoRetrofit(Context c, ListView lv ){
         this.context = c;
         this.listView = lv;
+
     }
 
     @Override
@@ -75,6 +82,20 @@ public class AgendamentoRetrofit extends AsyncTask<String, String, String> {
 
                 if( response.isSuccessful() ){
                     List<Agendamento> lstAgd = response.body();
+
+                    for( Agendamento agendamento : lstAgd  ){
+                        database = new Database( context );
+                        conn = database.getWritableDatabase();
+                        repositorioAgendamento = new RepositorioAgendamento( conn );
+                        Log.d("LodAgdRetrotipoRefRec",""+agendamento.getCdTipo());
+                        Log.d("LodAgdRetroCallInsert","Insert");
+                       // Log.d("tipoRefDs",""+agendamento.getTipo());
+                        long teste = repositorioAgendamento.addAgendamento( agendamento );
+
+                        Log.d("LodAgdRetroAfterInsert",""+teste);
+
+                    }
+
                     listaAgendamento.addAll( lstAgd );
 
                 }
@@ -129,6 +150,7 @@ public class AgendamentoRetrofit extends AsyncTask<String, String, String> {
                 Agendamento agendamento = listaAgendamento.get( i );
 
                 Intent intent = new Intent( context, CardapioActivity.class );
+                Log.d("LodAgdRetrCDTIPO", ""+agendamento.getCdTipo() );
                 intent.putExtra( "tipo", agendamento.getCdTipo() );
                 intent.putExtra( "data", agendamento.getData() );
                 intent.putExtra( "strTipo", agendamento.getTipo() );

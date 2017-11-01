@@ -4,7 +4,9 @@ package ham.org.br.nutricao.fragment;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -26,6 +28,9 @@ import java.util.List;
 
 import ham.org.br.nutricao.R;
 import ham.org.br.nutricao.activity.CardapioActivity;
+import ham.org.br.nutricao.activity.MainActivity;
+import ham.org.br.nutricao.database.Database;
+import ham.org.br.nutricao.dominio.RepositorioTipoRefeicao;
 import ham.org.br.nutricao.model.TipoRefeicao;
 import ham.org.br.nutricao.service.ServiceAPI;
 import ham.org.br.nutricao.service.TipoRefeicaoRetrofit;
@@ -38,7 +43,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PesquisarFragment extends Fragment {
+public class PesquisarFragment extends Fragment implements View.OnClickListener{
     static SimpleDateFormat data_br = new SimpleDateFormat("dd/MM/yyyy");
     static Date dataAtual = new Date();
 
@@ -48,6 +53,13 @@ public class PesquisarFragment extends Fragment {
 
     private Button pesquisar;
     private String strData = data_br.format( dataAtual );
+    private RepositorioTipoRefeicao repositorioTipoRefeicao;
+    private Database database;
+    private SQLiteDatabase conn;
+    ArrayAdapter<TipoRefeicao> adapterTipoRefeicao;
+
+    private ProgressDialog dialog;
+
     public PesquisarFragment() {
         // Required empty public constructor
     }
@@ -64,20 +76,21 @@ public class PesquisarFragment extends Fragment {
         pesquisar    = (Button) view.findViewById( R.id.btn_consultar );
 
 
+        if(MainActivity.TIPO_REFEICAO == 0 ){
+            chamarTipoRefeicao();
+        }else{
+            comboBox();
+        }
 
-        chamarTipoRefeicao();
 
 
 
         textViewData.setText( strData );
 
-        textViewData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDatePickerDialog();
-            }
-        });
-        listTipoRefeicao = getListTipoRefeicao();
+        textViewData.setOnClickListener(this);
+
+        pesquisar.setOnClickListener(this);
+
 
 
 
@@ -113,12 +126,54 @@ public class PesquisarFragment extends Fragment {
 
 
 
-    public ArrayList<TipoRefeicao> getListTipoRefeicao(){
-        return this.listTipoRefeicao;
+    private void comboBox(){
+        abrirEspera();
+        database = new Database( getActivity() );
+        conn = database.getReadableDatabase();
+        repositorioTipoRefeicao = new RepositorioTipoRefeicao( conn );
+        listTipoRefeicao = repositorioTipoRefeicao.getAllTipoRefeicao(  );
+        adapterTipoRefeicao = new ArrayAdapter<TipoRefeicao>(
+                getActivity(),
+                R.layout.item_tipo_refeicao,
+                R.id.tv_item_tipo_prato,
+                listTipoRefeicao);
+        spinnerTipoRefeicao.setAdapter( adapterTipoRefeicao );
+        fecharEspera();
     }
 
-    public void setListTipoRefeicao( ArrayList<TipoRefeicao> lista ){
-        this.listTipoRefeicao = lista;
+
+
+    @Override
+    public void onClick(View view) {
+        switch ( view.getId() ){
+            case R.id.btn_consultar:
+                    abrirTela();
+                break;
+            case R.id.textViewData:
+                  showDatePickerDialog();
+                break;
+        }
     }
 
+    private void abrirTela(){
+        Intent intent = new Intent( getActivity(), CardapioActivity.class );
+
+        TipoRefeicao tipoRefeicao = listTipoRefeicao.get( spinnerTipoRefeicao.getSelectedItemPosition() )  ;
+        intent.putExtra( "tipo", tipoRefeicao.getCodigo() );
+        intent.putExtra( "data", textViewData.getText() );
+        intent.putExtra( "strTipo", tipoRefeicao.getDescricao() );
+        getActivity().startActivity( intent );
+    }
+
+    private void abrirEspera(){
+        dialog = new ProgressDialog( getActivity() );
+        dialog.setMessage( "Aguarde um momento" );
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+    private void fecharEspera(){
+        dialog.dismiss();
+    }
 }

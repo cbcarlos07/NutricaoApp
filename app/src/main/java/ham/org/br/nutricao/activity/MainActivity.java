@@ -24,10 +24,12 @@ import ham.org.br.nutricao.R;
 import ham.org.br.nutricao.adapter.TabAdapter;
 import ham.org.br.nutricao.adapter.ViewPagerAdapter;
 import ham.org.br.nutricao.database.Database;
+import ham.org.br.nutricao.dominio.RepositorioAgendamento;
 import ham.org.br.nutricao.dominio.RepositorioTipoRefeicao;
 import ham.org.br.nutricao.fragment.AgendamentosFragment;
 import ham.org.br.nutricao.fragment.PesquisarFragment;
 import ham.org.br.nutricao.helper.Preferences;
+import ham.org.br.nutricao.model.Agendamento;
 import ham.org.br.nutricao.util.SlidingTabLayout;
 
 public class MainActivity extends AppCompatActivity {
@@ -46,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
     private Database database;
     private SQLiteDatabase conn;
     private RepositorioTipoRefeicao repositorioTipoRefeicao;
+    private RepositorioAgendamento repositorioAgendamento;
+    public static int TIPO_REFEICAO;
+    public static int AGENDAMENTOS;
 
 @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +60,11 @@ public class MainActivity extends AppCompatActivity {
             database = new Database(this);
             conn = database.getReadableDatabase();
             repositorioTipoRefeicao = new RepositorioTipoRefeicao( conn );
+            repositorioAgendamento = new RepositorioAgendamento( conn );
 
-            Log.d("Tipo Refeicao: ", ""+repositorioTipoRefeicao.getTipoRefeicaoCount());
+            //Log.d("Tipo Refeicao", ""+repositorioTipoRefeicao.getTipoRefeicaoCount());
+            TIPO_REFEICAO = repositorioTipoRefeicao.getTipoRefeicaoCount();
+            AGENDAMENTOS  = repositorioAgendamento.getAgendamentoCount();
 
 
         }catch (SQLiteException e){

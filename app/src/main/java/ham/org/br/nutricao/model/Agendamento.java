@@ -10,15 +10,16 @@ public class Agendamento {
 
 
     @SerializedName("cardapio")
-
     private int cardapio;
+
     @SerializedName("data")
-
     private String data;
-    @SerializedName("tipo")
 
+    @SerializedName("tipo")
     private String tipo;
+
     @SerializedName("cdtipo")
+    private int cdTipo;
 
     public int getId() {
         return id;
@@ -28,7 +29,8 @@ public class Agendamento {
         this.id = id;
     }
 
-    private int cdTipo;
+
+
 
     public int getCdTipo() {
         return cdTipo;

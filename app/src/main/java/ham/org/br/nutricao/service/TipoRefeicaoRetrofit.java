@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -25,6 +27,8 @@ import java.util.List;
 
 import ham.org.br.nutricao.R;
 import ham.org.br.nutricao.activity.CardapioActivity;
+import ham.org.br.nutricao.database.Database;
+import ham.org.br.nutricao.dominio.RepositorioTipoRefeicao;
 import ham.org.br.nutricao.fragment.PesquisarFragment;
 import ham.org.br.nutricao.model.Prato;
 import ham.org.br.nutricao.model.TipoPrato;
@@ -47,11 +51,15 @@ public class TipoRefeicaoRetrofit extends AsyncTask<String, String, ArrayList<Ti
     ArrayAdapter<TipoRefeicao> adapterTipoRefeicao;
     private Button btn_pesquisar;
     private TextView textView;
+    private RepositorioTipoRefeicao repositorioTipoRefeicao;
+    private Database database;
+    private SQLiteDatabase conn;
     public TipoRefeicaoRetrofit(Context c, Spinner spnr, Button button, TextView tV){
         this.context = c;
         this.spinner = spnr;
         this.btn_pesquisar = button;
         this.textView = tV;
+
     }
 
     @Override
@@ -82,12 +90,23 @@ public class TipoRefeicaoRetrofit extends AsyncTask<String, String, ArrayList<Ti
                     // Log.i("Mensagem",lstTipoRefeicao.toString());
 
                     for ( TipoRefeicao tipoRefeicao : lstTipoRefeicao ){
+
+                        try{
+                            database = new Database( context );
+                            conn = database.getWritableDatabase();
+                            repositorioTipoRefeicao = new RepositorioTipoRefeicao( conn );
+
+                            repositorioTipoRefeicao.addTipoRefeicao( tipoRefeicao );
+                        }catch (SQLiteException e){
+                            e.printStackTrace();
+                        }
+
                         listTipoRefeicao.add( tipoRefeicao );
                        // Log.i("TipoFor",tipoRefeicao.getDescricao());
                     }
 
-                    PesquisarFragment pesquisarFragment = new PesquisarFragment();
-                    pesquisarFragment.setListTipoRefeicao( listTipoRefeicao );
+                  //  PesquisarFragment pesquisarFragment = new PesquisarFragment();
+                    ///pesquisarFragment.setListTipoRefeicao( listTipoRefeicao );
 
                     adapterTipoRefeicao = new ArrayAdapter<TipoRefeicao>(
                             context,

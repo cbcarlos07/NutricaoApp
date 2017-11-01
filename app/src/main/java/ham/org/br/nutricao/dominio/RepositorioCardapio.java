@@ -1,6 +1,7 @@
 package ham.org.br.nutricao.dominio;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import ham.org.br.nutricao.database.ScriptSQL;
@@ -29,10 +30,39 @@ public class RepositorioCardapio {
     public void excluir( int id ){
 
         conn.delete(ScriptSQL.CARDAPIO_TABLE, ScriptSQL.CARDAPIO_ID+" = ?", new String[] { String.valueOf( id ) });
+        conn.close();
     }
 
     public void excluirTudo(){
         conn.delete(ScriptSQL.CARDAPIO_TABLE, null, null);
         conn.close();
+    }
+
+    public int getCardapioCount( int i  ){
+
+        Cursor cursor = conn.query( ScriptSQL.CARDAPIO_TABLE, null, ScriptSQL.CARDAPIO_ID+" = ?", new String[]{ String.valueOf( i ) }, null, null, null );
+        int total = 0;
+        int coluna = cursor.getColumnIndex( ScriptSQL.CARDAPIO_DATA );
+        if( cursor != null ){
+            cursor.moveToFirst();
+            total = 1;
+        }
+        cursor.close();
+        return total;
+
+    }
+
+    public String getDataCardapio( int id ){
+
+        Cursor cursor = conn.query( ScriptSQL.CARDAPIO_TABLE, null, ScriptSQL.CARDAPIO_ID+" = ?", new String[]{ String.valueOf( id ) }, null, null, null );
+        String data = "";
+        int hrInicio = cursor.getColumnIndex( ScriptSQL.CARDAPIO_DATA );
+        if( cursor != null ){
+            cursor.moveToFirst();
+            data = cursor.getString( hrInicio );
+        }
+        cursor.close();
+        return data;
+
     }
 }

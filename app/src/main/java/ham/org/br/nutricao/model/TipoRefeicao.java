@@ -11,6 +11,36 @@ public class TipoRefeicao {
     private int codigo;
     @SerializedName("tipo")
     private String descricao;
+    @SerializedName("cancelamento")
+    private int cancelamento;
+    @SerializedName("inicio")
+    private int inicio;
+    @SerializedName("hrInicio")
+    private String hrInicio;
+
+    public String getHrInicio() {
+        return hrInicio;
+    }
+
+    public void setHrInicio(String hrInicio) {
+        this.hrInicio = hrInicio;
+    }
+
+    public int getInicio() {
+        return inicio;
+    }
+
+    public void setInicio(int inicio) {
+        this.inicio = inicio;
+    }
+
+    public int getCancelamento() {
+        return cancelamento;
+    }
+
+    public void setCancelamento(int cancelamento) {
+        this.cancelamento = cancelamento;
+    }
 
     public int getCodigo() {
         return codigo;
