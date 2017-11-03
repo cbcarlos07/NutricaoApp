@@ -50,7 +50,7 @@ public class RepositorioTipoRefeicao {
                 TipoRefeicao obj = new TipoRefeicao();
                 obj.setCodigo( cursor.getInt( colCodigo ) );
                 obj.setDescricao( cursor.getString( colDescricao ) );
-                Log.d( "horaInicio", cursor.getString( colHrInicio ) );
+               // Log.d( "horaInicio", cursor.getString( colHrInicio ) );
                 objList.add( obj );
             }while ( cursor.moveToNext() );
         }

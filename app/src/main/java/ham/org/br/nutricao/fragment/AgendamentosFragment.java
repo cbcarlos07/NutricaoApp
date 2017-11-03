@@ -62,11 +62,11 @@ public class AgendamentosFragment extends Fragment implements SwipeRefreshLayout
 
 
         if( MainActivity.AGENDAMENTOS == 0 ){
-            Log.d("LodAgendamentos", "Não possui Agendamentos");
+           // Log.d("LodAgendamentos", "Não possui Agendamentos");
             buscarDados();
             comboBox();
         }else{
-            Log.d("LodAgendamentos", "possui Agendamentos");
+           // Log.d("LodAgendamentos", "possui Agendamentos");
             comboBox();
         }
 
