@@ -63,7 +63,7 @@ public class RepositorioAgendamento {
                 agendamento.setCardapio( cursor.getInt( colCardapio ) );
                 agendamento.setTipo( cursor.getString( colTipo ) );
              //   Log.d("LodRAgdCdTipoSQlite",""+cursor.getInt( colCdTipo ));
-                Log.d("LodRAgdDataSQlite",""+cursor.getString( colData ));
+                //Log.d("LodRAgdDataSQlite",""+cursor.getString( colData ));
           //      Log.d("LodRAgdAgoraSQlite",""+cursor.getString( colDate ));
                 agendamento.setCdTipo( cursor.getInt( colCdTipo ) );
                 agendamento.setData( cursor.getString( colData ) );

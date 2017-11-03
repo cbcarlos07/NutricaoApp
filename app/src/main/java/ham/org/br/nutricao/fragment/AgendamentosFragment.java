@@ -4,11 +4,8 @@ package ham.org.br.nutricao.fragment;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import ham.org.br.nutricao.R;
 import ham.org.br.nutricao.activity.CardapioActivity;
@@ -29,9 +25,10 @@ import ham.org.br.nutricao.adapter.SwipeListAdapter;
 import ham.org.br.nutricao.database.Database;
 import ham.org.br.nutricao.dominio.RepositorioAgendamento;
 import ham.org.br.nutricao.dominio.RepositorioCardapio;
+import ham.org.br.nutricao.dominio.RepositorioPrato;
+import ham.org.br.nutricao.dominio.RepositorioTipoPrato;
 import ham.org.br.nutricao.model.Agendamento;
 import ham.org.br.nutricao.service.AgendamentoRetrofit;
-import ham.org.br.nutricao.service.AgendamentoRetrofitSwiper;
 
 
 public class AgendamentosFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
@@ -44,7 +41,7 @@ public class AgendamentosFragment extends Fragment implements SwipeRefreshLayout
     private SQLiteDatabase conn;
     private RepositorioAgendamento repositorioAgendamento;
     private RepositorioCardapio repositorioCardapio;
-    private ArrayAdapter<Agendamento> arrayAdapter;
+    public static ArrayAdapter<Agendamento> arrayAdapter;
 
     public AgendamentosFragment() {
 
@@ -103,6 +100,14 @@ public class AgendamentosFragment extends Fragment implements SwipeRefreshLayout
             repositorioCardapio = new RepositorioCardapio( conn );
             repositorioCardapio.excluirTudo();
 
+            conn = database.getWritableDatabase();
+            RepositorioPrato repositorioPrato = new RepositorioPrato( conn );
+            repositorioPrato.excluirTudo();
+
+            conn = database.getWritableDatabase();
+            RepositorioTipoPrato repositorioTipoPrato = new RepositorioTipoPrato( conn );
+            repositorioTipoPrato.excluirTudo();
+
             buscarDados();
 
             comboBox();
@@ -133,24 +138,20 @@ public class AgendamentosFragment extends Fragment implements SwipeRefreshLayout
     }
 
 
-    private void comboBox(){
-        Log.d("LodMetodo", "Combobox");
+    public void comboBox(){
+       // Log.d("LodMetodo", "Combobox");
         database = new Database( getActivity() );
         conn = database.getReadableDatabase();
         repositorioAgendamento = new RepositorioAgendamento( conn );
         agendamentoList = repositorioAgendamento.getAllAgendamento();
-        for( Agendamento agd : agendamentoList ){
-            Log.d("LodAgdFrgData",agd.getData());
-            Log.d("LodAgdFrgTipo",agd.getTipo());
 
-        }
         arrayAdapter = new AgendaAdapter( getActivity(), agendamentoList );
         listView.setAdapter( arrayAdapter );
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("LodCliqueNovaTela", "Nova tela");
+               // Log.d("LodCliqueNovaTela", "Nova tela");
                 abrirNovaTela( i );
             }
         });
@@ -158,12 +159,18 @@ public class AgendamentosFragment extends Fragment implements SwipeRefreshLayout
 
     private void  abrirNovaTela( int i ){
 
-        Log.d( "LodAFAbrirNovaTela", "Abrir nova tela" );
+      //  Log.d( "LodAFAbrirNovaTela", "Abrir nova tela" );
 
         Agendamento agendamento = agendamentoList.get( i );
 
         Intent intent = new Intent( getActivity(), CardapioActivity.class );
-        Log.d("LodAF Codigo Tipo", ""+agendamento.getCdTipo());
+
+        if( CardapioActivity.cardapioAtivo ){
+            CardapioActivity.cardapioActivity.finish();
+         //   Log.d("174.LogAFCardaAct","CardapioAcitivty ativo finalizar");
+        }
+
+      //  Log.d("LodAF Codigo Tipo", ""+agendamento.getCdTipo());
 
         intent.putExtra( "tipo", agendamento.getCdTipo() );
         intent.putExtra( "data", agendamento.getData() );
@@ -171,6 +178,8 @@ public class AgendamentosFragment extends Fragment implements SwipeRefreshLayout
 
         getActivity().startActivity( intent );
     }
+
+
 
 
 

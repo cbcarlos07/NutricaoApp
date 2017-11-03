@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,7 +41,9 @@ import ham.org.br.nutricao.dominio.RepositorioCardapio;
 import ham.org.br.nutricao.dominio.RepositorioPrato;
 import ham.org.br.nutricao.dominio.RepositorioTipoPrato;
 import ham.org.br.nutricao.dominio.RepositorioTipoRefeicao;
+import ham.org.br.nutricao.fragment.AgendamentosFragment;
 import ham.org.br.nutricao.helper.Preferences;
+import ham.org.br.nutricao.model.Agendamento;
 import ham.org.br.nutricao.model.Cardapio;
 import ham.org.br.nutricao.model.Mensagem;
 import ham.org.br.nutricao.model.Message;
@@ -94,6 +97,8 @@ public class CardapioActivity extends AppCompatActivity {
     private RepositorioPrato repositorioPrato;
     private RepositorioCardapio repositorioCardapio;
 
+    private Bundle bundle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +128,7 @@ public class CardapioActivity extends AppCompatActivity {
 
 
 
-        Bundle bundle = getIntent().getExtras();
+        bundle = getIntent().getExtras();
       //  Log.d("LodCABundle", ""+bundle);
 
         idTipoRef = bundle.getInt( "tipo" );
@@ -136,7 +141,7 @@ public class CardapioActivity extends AppCompatActivity {
 
 
         serviceAPI = ServiceAPI.retrofit.create(ServiceAPI.class);
-
+         getDatas();
          codCardapio();
 
 
@@ -176,6 +181,19 @@ public class CardapioActivity extends AppCompatActivity {
 
     }
 
+    private void getDatas(){
+        bundle = getIntent().getExtras();
+        //  Log.d("LodCABundle", ""+bundle);
+
+        idTipoRef = bundle.getInt( "tipo" );
+        //   Log.d("LodCodigoRef", ""+idTipoRef );
+        data   = bundle.getString( "data" );
+        String strTipo   = bundle.getString( "strTipo" );
+        //toolbar.setTitle( "Cardápio - "+data+" - "+strTipo );
+        setTitle( strTipo+" - "+data );
+        getHoras();
+    }
+
     private void codCardapio(){
         database = new Database( this );
         conn = database.getReadableDatabase();
@@ -184,7 +202,7 @@ public class CardapioActivity extends AppCompatActivity {
         conn = database.getReadableDatabase();
         repositorioCardapio = new RepositorioCardapio( conn );
         int varCdCardapio = repositorioCardapio.getCdCardapio( data, idTipoRef );
-        Log.d("LodCACdCardapio", "Codigo do Cardapio: "+varCdCardapio);
+      //  Log.d("LogCACdCardapio", "Codigo do Cardapio: "+varCdCardapio);
         if( varCdCardapio > 0 ){
             setCdCardapio( varCdCardapio );
             preencherCardapioSQlite(  );
@@ -194,10 +212,14 @@ public class CardapioActivity extends AppCompatActivity {
 
     }
 
+
+
+
     @Override
     protected void onStart() {
         super.onStart();
         cardapioAtivo = true;
+
     }
 
     @Override
@@ -207,15 +229,15 @@ public class CardapioActivity extends AppCompatActivity {
     }
 
     private void preencherCardapioSQlite(  ){
-        Log.d("LodCAPreenCS","Preencher cardapio SQlite");
+      //  Log.d("LodCAPreenCS","Preencher cardapio SQlite");
         database = new Database( this );
         conn = database.getReadableDatabase();
         repositorioPrato = new RepositorioPrato( conn );
-        repositorioPrato.getListPratos( getCdCardapio() );
+       // repositorioPrato.getListPratos( getCdCardapio() );
         conn = database.getReadableDatabase();
         repositorioCardapio = new RepositorioCardapio( conn );
         String data = repositorioCardapio.getDataCardapio( getCdCardapio() );
-        Log.d("LodCADataCard", data);
+       // Log.d("LodCADataCard", data);
 
         if( data.equals("") ){
 
@@ -232,12 +254,11 @@ public class CardapioActivity extends AppCompatActivity {
             conn = database.getReadableDatabase();
             repositorioTipoPrato = new RepositorioTipoPrato( conn );
             repositorioPrato = new RepositorioPrato( conn );
-            Log.d("231.LodCACdCar", ""+this.getCdCardapio());
+          //  Log.d("231.LogCACdCar", ""+this.getCdCardapio());
             List<Prato> listTipoPratos = repositorioPrato.getTiposPratos( getCdCardapio()  );
             int loop =  0;
 
-            ArrayList<String> pratos = new ArrayList<String>();
-            ArrayList<String> ingredientes = new ArrayList<String>();
+
             int cdTipoPrato = 0;
             for( Prato prato : listTipoPratos ){
 
@@ -248,12 +269,15 @@ public class CardapioActivity extends AppCompatActivity {
                 cdTipoPrato = prato.getTipoprato();
 
                 String strTipoPrato = repositorioTipoPrato.getTipoPrato( cdTipoPrato );
-                Log.d("LodCATipoPrato", strTipoPrato);
+                Log.d("LogCATipoPrato", strTipoPrato);
                 listGrupo.add( strTipoPrato );
 
                 conn = database.getReadableDatabase();
                 repositorioPrato = new RepositorioPrato( conn );
                 List<Prato> dishList = repositorioPrato.getPratos( cdCardapio, cdTipoPrato );
+
+                ArrayList<String> pratos = new ArrayList<String>();
+                ArrayList<String> ingredientes = new ArrayList<String>();
                 for( Prato dish :  dishList ){
 
                     pratos.add( dish.getPrato() );
@@ -329,19 +353,19 @@ public class CardapioActivity extends AppCompatActivity {
                         conn = database.getWritableDatabase();
                         repositorioCardapio = new RepositorioCardapio( conn );
                         Cardapio cardapio = new Cardapio();
-                        Log.d("LodCAdCdCardResp", ""+mensagem.getCardapio());
+                      //  Log.d("LodCAdCdCardResp", ""+mensagem.getCardapio());
                         cardapio.setCodigo( mensagem.getCardapio() );
-                        Log.d("LodCADataResp", data);
+                   //     Log.d("LodCADataResp", data);
                         cardapio.setData( data );
                         cardapio.setTipo( idTipoRef );
                         long teste = repositorioCardapio.addCardapio( cardapio );
                         if( teste > 0 ){
-                            Log.d("LodInsertCard: ", "Inserido com sucesso: "+teste);
+                        //    Log.d("LogInsertCard: ", "Inserido com sucesso: "+teste);
                         }
 
                         for (TipoPrato tipoPrato : tipoPratoList){
                             ArrayList<Prato> pratoArrayList = tipoPrato.getPratoList();
-                            Log.i("Tipo prato: ", tipoPrato.getTipoprato());
+                       //     Log.i("344. LogRPTipoprato: ", tipoPrato.getTipoprato());
                             listGrupo.add( tipoPrato.getTipoprato() );
 
                             database = new Database( getApplicationContext() );
@@ -349,12 +373,14 @@ public class CardapioActivity extends AppCompatActivity {
                             repositorioTipoPrato = new RepositorioTipoPrato( conn );
                             String strTipoPrato = repositorioTipoPrato.getTipoPrato( tipoPrato.getCdtipoprato() );
                             if( strTipoPrato.equals("") ){
+                          //      Log.d("LogInsertTPPRato", "Nao possui tipoprato: "+tipoPrato.getTipoprato()+" ID - "+tipoPrato.getCdtipoprato());
                                 conn = database.getWritableDatabase();
                                 repositorioTipoPrato = new RepositorioTipoPrato( conn );
 
                                 long retornoCard = repositorioTipoPrato.addTipoPrato( tipoPrato );
                                 if( retornoCard > 0 ){
-                                    Log.d("LodInsertPrato", "Inserido com sucesso: "+retornoCard);
+                           //         Log.d("LogInsertPrato", "Inserido com sucesso: "+retornoCard);
+
                                 }
 
                             }
@@ -371,17 +397,26 @@ public class CardapioActivity extends AppCompatActivity {
                                 listIngredientes.put( prato.getPrato(), prato.getIngrediente() );
 
                                 database = new Database( getApplicationContext() );
-                                conn = database.getWritableDatabase();
+                                conn = database.getReadableDatabase();
                                 repositorioPrato = new RepositorioPrato( conn );
-                                Prato dish = new Prato();
-                                dish.setCardapio( tipoPrato.getCardapio() );
-                                dish.setTipoprato( tipoPrato.getCdtipoprato() );
-                                dish.setPrato( prato.getPrato() );
-                                dish.setIngrediente( prato.getIngrediente() );
-                                long retornoPrato = repositorioPrato.addPrato( dish );
-                                if( retornoPrato > 0 ){
-                                    Log.d("LodInsertPrato", "Inserido com sucesso");
+                                if ( repositorioPrato.getPratoCount( getCdCardapio(), prato.getPrato() ) == 0 ){
+                                    conn = database.getWritableDatabase();
+                                    repositorioPrato = new RepositorioPrato( conn );
+                                    Prato dish = new Prato();
+                                    dish.setCardapio( tipoPrato.getCardapio() );
+                                    dish.setTipoprato( tipoPrato.getCdtipoprato() );
+                                    dish.setPrato( prato.getPrato() );
+                                    dish.setIngrediente( prato.getIngrediente() );
+
+
+
+                                    long retornoPrato = repositorioPrato.addPrato( dish );
+                                    if( retornoPrato > 0 ){
+                                     //   Log.d("LodInsertPrato", "Inserido com sucesso");
+                                    }
                                 }
+
+
 
 
                             }
@@ -394,6 +429,11 @@ public class CardapioActivity extends AppCompatActivity {
 
 
                     }
+
+                  //  Log.d("431.ListaAposCad", "Listar tipos apos cadastro");
+                    conn = database.getReadableDatabase();
+                    repositorioTipoPrato = new RepositorioTipoPrato( conn );
+                    repositorioTipoPrato.listaTipoPrato();
 
 
 
@@ -457,7 +497,8 @@ public class CardapioActivity extends AppCompatActivity {
                 if( !isOnline() ){
                     dialogAlert( "Ops","Ocorreu um problema ao conectar\nPor favor verique sua conexão" );
                 }else{
-                    dialogAlert( "Ops","Ocorreu um problema ao salvar operação\nTente novamente mais tarde" );
+                    dialogAlert( "Ops","Ocorreu um problema ao salvar operação\nTente novamente mais tarde " );
+                    t.printStackTrace();
                 }
 
                 btn_acao.setVisibility( View.INVISIBLE );
@@ -672,8 +713,31 @@ public class CardapioActivity extends AppCompatActivity {
                         setAcao( 'C' );
                         btn_acao.setText( getString(R.string.btn_cancelar ) );
                         btn_acao.setBackgroundColor(   getResources().getColor( R.color.colorNormalCancelar )  );
+
+
+
                         break;
                     case 'C':
+                        conn = database.getWritableDatabase();
+                        repositorioCardapio = new RepositorioCardapio( conn );
+                        repositorioCardapio.excluir( getCdCardapio() );
+
+                        conn = database.getWritableDatabase();
+                        repositorioPrato = new RepositorioPrato( conn );
+                        repositorioPrato.excluir( getCdCardapio() );
+                        Agendamento agendamento = new Agendamento();
+                        agendamento.setCardapio( getCdCardapio() );
+                        agendamento.setCdTipo( idTipoRef );
+                        database = new Database( getApplicationContext() );
+                        conn = database.getReadableDatabase();
+                        repositorioTipoRefeicao = new RepositorioTipoRefeicao( conn );
+                        String strTipo = repositorioTipoPrato.getTipoPrato( idTipoRef );
+                        agendamento.setData( data );
+                        agendamento.setTipo( strTipo );
+                        int position = AgendamentosFragment.arrayAdapter.getPosition( agendamento );
+                        AgendamentosFragment.arrayAdapter.remove( agendamento );
+                        AgendamentosFragment.arrayAdapter.notifyDataSetChanged(  );
+
 
                         setAcao( 'A' );
                         btn_acao.setText( getString(R.string.btn_agendar ) );
@@ -796,7 +860,7 @@ public class CardapioActivity extends AppCompatActivity {
         database = new Database( this );
         conn = database.getReadableDatabase();
         repositorioTipoRefeicao = new RepositorioTipoRefeicao( conn );
-        Log.d("LodCACdTipoRef", ""+idTipoRef );
+      //  Log.d("LodCACdTipoRef", ""+idTipoRef );
         TipoRefeicao tipoRefeicao = repositorioTipoRefeicao.getPrazos( idTipoRef );
 
 
@@ -815,18 +879,46 @@ public class CardapioActivity extends AppCompatActivity {
         double dia1 = ( d1.getTime() / 86400000 ); //86400000 representa 1 dia
         double dia2 = ( d2.getTime() / 86400000 ); //86400000 representa 1 dia
 
-        Log.d ("LodDataInicial",""+dia1);
-        Log.d ("LodDataFinal",""+dia2);
+       // Log.d ("LodDataInicial",""+dia1);
+      //  Log.d ("LodDataFinal",""+dia2);
         double dt =  dia1 - ( tipoRefeicao.getCancelamento() / 24 ) -  dia2  ; //
         //float dt = ( d1.getTime() - (( 12 / 24 ) * 3600000 ) ) -  d2.getTime()  ; // 1 hora para compensar horário de verão
        // float dt = (d2.getTime() - d1.getTime()) + 3600000; // 1 hora para compensar horário de verão
        // System.out.println (dt / 86400000L); // passaram-se 67111 dias
        // float passaram = dt / 86400000L;
-        Log.d("LodHoraFinal", ""+dt );
+     //   Log.d("LodHoraFinal", ""+dt );
         return dt;
 
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if( bundle !=  null ){
+            getDatas();
+        }
+
+        database = new Database( this );
+        Log.d("873.CAOnresume", "Buscardadospratos");
+        conn = database.getReadableDatabase();
+        repositorioPrato = new RepositorioPrato( conn );
+        repositorioPrato.getListPratos( getCdCardapio() );
+
+        conn = database.getReadableDatabase();
+        repositorioTipoPrato = new RepositorioTipoPrato( conn );
+        repositorioTipoPrato.listaTipoPrato();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
+
+
 
 }
+
+

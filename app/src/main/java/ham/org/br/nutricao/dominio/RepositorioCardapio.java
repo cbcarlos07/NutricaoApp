@@ -22,6 +22,7 @@ public class RepositorioCardapio {
     public long addCardapio (Cardapio obj ){
 
         ContentValues values = new ContentValues();
+        Log.d("25.LogRCCdCard",obj.getCodigo() + " Tipo: "+obj.getTipo()+" Data: "+obj.getData());
         values.put( ScriptSQL.CARDAPIO_ID, obj.getCodigo() );
         values.put( ScriptSQL.CARDAPIO_TIPO, obj.getTipo() );
         values.put( ScriptSQL.CARDAPIO_DATA, obj.getData() );

@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteException;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private RepositorioAgendamento repositorioAgendamento;
     public static int TIPO_REFEICAO;
     public static int AGENDAMENTOS;
+    private Fragment fragment;
 
 @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,4 +240,6 @@ public class MainActivity extends AppCompatActivity {
         finish();
 
     }
+
+
 }

@@ -130,7 +130,7 @@ public class CrachaActivity extends AppCompatActivity implements View.OnClickLis
                     if( !isOnline() ){
                         dialogAlertErro( "Ops","Ocorreu um problema ao conectar" );
                     }else{
-                        dialogAlertErro( "Ops","Não foi possível recuperar informação");
+                        dialogAlertErro( "Ops","Não foi possível recuperar informação ");
                         Log.d("Erro", t.getMessage());
                     }
                    /* if( t.hashCode() == 156572836 ){

@@ -85,6 +85,18 @@ public class RepositorioTipoRefeicao {
 
     }
 
+    public String getTipoRefeicao( int cod ){
+
+        Cursor cursor = conn.query( ScriptSQL.TIPO_REFEICAO_TABLE, null, ScriptSQL.TIPO_REFEICAO_ID +" = ? ", new String[]{ String.valueOf( cod ) }, null, null, null, null );
+        String tipo = "";
+        int coluna = cursor.getColumnIndex( ScriptSQL.TIPO_REFEICAO_DSTIPO );
+        if( cursor.moveToNext() ){
+            tipo = cursor.getString( coluna );
+        }
+        return tipo;
+
+    }
+
 
 
 }
