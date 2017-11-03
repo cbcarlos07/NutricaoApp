@@ -758,6 +758,7 @@ public class CardapioActivity extends AppCompatActivity {
                     dialogAlert( "Ops","Ocorreu um problema ao conectar\nPor favor verique sua conexão" );
                 }else{
                     dialogAlert( "Ops","Ocorreu um problema ao salvar operação\nTente novamente mais tarde" );
+                    t.printStackTrace();
                 }
 
 

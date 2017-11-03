@@ -24,8 +24,8 @@ import retrofit2.http.Query;
  */
 
 public interface ServiceAPI {
-   //  String BASE_URL = "http://boleto.ham.org.br:8080/webservice/";
-   static String BASE_URL = "http://10.50.140.54/webservice/";
+     String BASE_URL = "http://boleto.ham.org.br:8080/webservice/";
+   //static String BASE_URL = "http://10.50.140.54/webservice/";
    String webservice = "nutricao/"; 
 
     @POST( webservice )
